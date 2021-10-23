@@ -38,6 +38,11 @@
                         <input type="button" class="btn btn-info" value="Панель Модератора" onClick='location.href="/moderator"'>
                      </form>
                   </div>
+                  <div sec:authorize="isAuthenticated()">
+                     <form>
+                        <input type="button" class="btn btn-info" value="Messenger" onClick='location.href="/messenger"'>
+                     </form>
+                  </div>
                </ul>
 
 <!--               <button  sec:authorize="hasRole('ROLE_ADMIN')"-->

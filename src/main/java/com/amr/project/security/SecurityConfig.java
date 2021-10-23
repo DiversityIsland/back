@@ -40,6 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/oauth2/**").permitAll()
                 .antMatchers("/").anonymous()
+                .antMatchers("/messenger").hasAuthority("USER")
                 .antMatchers("/admin").hasAuthority("ADMIN")
                 .antMatchers("/user").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers("/moderator").hasAnyAuthority("MODERATOR", "ADMIN")

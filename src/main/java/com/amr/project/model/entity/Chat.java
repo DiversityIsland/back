@@ -22,10 +22,11 @@ public class Chat {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Message> messages;
 
+    @Column(unique = true)
     private Long hash;
 
     public Chat(List<User> members) {
         this.members = members;
-        this.hash = members.stream().map(e -> e.getId()).map(e -> e.hashCode()).mapToLong(e -> e).sum();
+        this.hash = members.stream().map(User::hashCode).mapToLong(e -> e).sum();
     }
 }

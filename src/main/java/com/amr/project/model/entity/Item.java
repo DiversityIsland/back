@@ -15,7 +15,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @ApiIgnore
 @Builder
-@ToString
+@ToString(of = {"id", "name", "price"})
 public class Item {
 
     @Id
