@@ -1,14 +1,15 @@
 package com.amr.project.model.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "message")
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
+@Builder
 public class Message {
     @Id
     @Column(name = "id")
@@ -28,4 +29,7 @@ public class Message {
     private String textMessage;
 
     private boolean viewed;
+
+    public Message() {
+    }
 }

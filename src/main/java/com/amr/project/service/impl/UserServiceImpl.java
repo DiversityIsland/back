@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -79,6 +80,23 @@ public class UserServiceImpl extends ReadWriteServiceImpl<User, Long> implements
         addressDao.update(address);
         super.update(user);
 
+    }
+
+    @Override
+    public User findUserConnectWithCurrentUserByChatId(Long chatId, Long currentId) {
+        return userDao.findUsersByChatId(chatId).stream()
+                .filter(u -> !u.getId().equals(currentId))
+                .findFirst().orElse(null);
+    }
+
+    @Override
+    public Long findCountTotalElementBySearchName(String name) {
+        return userDao.findCountTotalElementBySearchName(name);
+    }
+
+    @Override
+    public List<User> findUserBySearchNameWithPagination(String name, int pageNum, int pageSize) {
+        return userDao.findUserBySearchNameWithPagination(name, pageNum, pageSize);
     }
 
 

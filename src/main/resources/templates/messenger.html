@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--  jquery  -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <!--    libs for stomp and sockjs-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <!--    end libs for stomp and sockjs-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" type="text/css">
+    <link href="css/messenger.css" rel="stylesheet">
+
+    <title>Custom messenger</title>
+</head>
+<body style="padding-top: 0">
+
+
+<div style="margin-bottom: 20px">
+    <!--HEADER-->
+    <header class="bg-dark text-white" style="height: 44px;">
+        <div class="container" style="height: 44px;">
+            <div class="d-flex align-items-center justify-content-center justify-content-lg-start"
+                 style="height: 44px;">
+                <a href="/" class="d-flex align-items-center mb-lg-0 text-white text-decoration-none">
+                    <h5 style="margin: 0;">LOGO</h5>
+                </a>
+                <!--NavBar(HEADER)-->
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 ms-5">
+                </ul>
+
+                <div class="text-end">
+
+                    <button sec:authorize="isAnonymous()" type="button" id="user_open_modal_btn"
+                            class="btn btn-outline-light me-2">Войти
+                    </button>
+                    <button sec:authorize="isAnonymous()" type="button" id="user_open_modal_reg" class="btn btn-warning">
+                        Зарегистрироваться
+                    </button>
+
+                    <script>
+                        $(document).ready(function () {
+                            if (window.location.href !== 'http://localhost:8888/') {
+                                $('#user_open_modal_btn').hide();
+                            }
+                        })
+                        $(document).ready(function () {
+                            if (window.location.href !== 'http://localhost:8888/') {
+                                $('#user_open_modal_reg').hide();
+                            }
+                        })
+                    </script>
+
+                    <!--ссылка и информация пользователя при аутентификации-->
+                    <div class="dropdown" sec:authorize="isAuthenticated()" style="position: relative; ">
+                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle show text-white"
+                           id="dropdownUser_btn">
+                            <img th:src="${user.getImages()?.getPictureForPage()}" alt="" width="32" height="32" class="rounded-circle me-2">
+                            <strong th:text="${user.getUsername()}"></strong>
+                        </a>
+                        <ul class="dropdown-menu text-small shadow" id="dropdown_user"
+                            style="position: absolute; top:45px; left:0; margin: 0px; ">
+                            <li><a class="dropdown-item" th:href="@{/user/{id}(id=${user.getId()})}">Мой профиль</a></li>
+                            <li><a class="dropdown-item" th:href="@{/cart}">Корзина</a></li>
+                            <li><a class="dropdown-item" th:href="@{/favorites}">Избранное</a></li>
+                            <li><a class="dropdown-item" th:href="@{/discounts}">Скидки</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" th:href="@{/logout}">Sign out</a></li>
+                        </ul>
+                        <script>
+                            /**
+                             * переключение окна dropdown
+                             */
+                            $(document).ready(function () {
+                                $('#dropdownUser_btn').on('click', function (e) {
+                                    e.preventDefault();
+                                    $('#dropdown_user').toggleClass('show');
+                                })
+                            })
+
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+</div>
+
+
+<div class="containerMsg clearfix">
+    <div class="people-list" id="people-list">
+        <div class="search">
+            <input id="userName" type="text"/>
+            <i class="fa fa-search"></i>
+        </div>
+        <hr style="margin-top: 0" />
+
+        <h6 class="text-center" id="searchResult">&nbsp;</h6>
+
+        <div id="divUsers">
+            <ul class="list" id="usersList" >
+
+            </ul>
+        </div>
+
+        <!--Pagination-->
+        <div class="text-center">
+        <div class="pagination" id="paginPrevious">
+        </div>
+        <div class="pagination" id="activePageShow">
+        </div>
+        <div class="pagination" id="paginNext">
+        </div>
+        </div>
+        <hr style="margin-top: 0" />
+
+
+        <h6 class="text-center">Личные сообщения:</h6>
+
+        <div id="divPrivateChats">
+            <ul class="list" id="privateChats">
+
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="chat">
+        <div class="chat-header clearfix" id="chatHeaderLogo">
+            <div class="chat-about">
+                <div class="chat-with" id="chatWithUser" style="color: red">
+                    &nbsp; <br/>
+                    &nbsp; <br/>
+                </div>
+            </div>
+        </div> <!-- end chat-header -->
+
+        <div class="chat-history" id="chatHistoryDiv">
+            <ul id="chat-history">
+
+
+            </ul>
+
+        </div> <!-- end chat-history -->
+
+        <div class="chat-message clearfix" id="inputTextArea">
+            &nbsp;
+            <br/><br/><br/><br/>
+            &nbsp;
+        </div> <!-- end chat-message -->
+
+    </div> <!-- end chat -->
+
+</div> <!-- end container -->
+
+<script type="text/javascript" th:src="@{/js/messenger.js}" src="../static/js/messenger.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -32,6 +32,8 @@
                      <font style="vertical-align: inherit;">Панель модератора</font></a></li>
                   <li><a  href="/admin" sec:authorize="hasAnyAuthority('ADMIN')" class="nav-link px-2 text-white">
                      <font style="vertical-align: inherit;">Панель администратора</font></a></li>
+                  <li><a  href="/messenger" sec:authorize="isAuthenticated()" class="nav-link px-2 text-white">
+                     <font style="vertical-align: inherit;">Messenger</font></a></li>
                </ul>
 
 
