@@ -78,8 +78,5 @@ public class UserServiceImpl extends ReadWriteServiceImpl<User, Long> implements
         countryDao.update(country);
         addressDao.update(address);
         super.update(user);
-
     }
-
-
 }

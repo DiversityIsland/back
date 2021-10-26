@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Principal;
+
 @Controller
 public class ItemController {
 
@@ -34,7 +36,8 @@ public class ItemController {
 
     @Autowired
     public ItemController(ItemService itemService, CartItemService cartItemService, UserService userService,
-                          ItemMapper itemMapper, CartItemMapper cartItemMapper, ShopMapper shopMapper, DiscountService discountService, ReviewService reviewService) {
+                          ItemMapper itemMapper, CartItemMapper cartItemMapper, ShopMapper shopMapper,
+                          DiscountService discountService, ReviewService reviewService) {
         this.itemService = itemService;
         this.cartItemService = cartItemService;
         this.userService = userService;
@@ -70,7 +73,9 @@ public class ItemController {
     }
 
     @PostMapping("/product/{id}")
-    public String saveReview(@PathVariable("id") Long id, @ModelAttribute("newReview") Review review, @ModelAttribute("rating") int rating) {
+    public String saveReview(@PathVariable("id") Long id,
+                             @ModelAttribute("newReview") Review review,
+                             @ModelAttribute("rating") int rating) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByUsername(authentication.getName()).get();
         review.setRating(rating);

@@ -3,202 +3,253 @@
       xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Product page</title>
-  <link href="/css/product_page_style.css" rel="stylesheet">
-  <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-        rel="stylesheet">
-  <link crossorigin="anonymous" href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"/>
-  <script crossorigin="anonymous"
-          integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-          th:src="@{'https://code.jquery.com/jquery-3.5.1.slim.min.js'}"></script>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Product page</title>
+    <link href="/css/product_page_style.css" rel="stylesheet">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          rel="stylesheet">
+    <link crossorigin="anonymous" href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"/>
+    <script crossorigin="anonymous"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            th:src="@{'https://code.jquery.com/jquery-3.5.1.slim.min.js'}"></script>
 </head>
+
 <body>
 <!--HEADER-->
 <div th:replace="/includes/header :: header"></div>
 
 <div class="row no-gutters vh-100">
-  <!---------- Left Column / Image ---------->
-  <div class="col-md-6 bg-light">
-    <div class="product-image">
-      <a href="">
-        <img height="669" th:src="${item.getImages()[0]}" width="669">
-      </a>
-    </div>
-  </div>
-
-  <!---------- Right Column ---------->
-  <div class="col-md-6 bg-white">
-    <br/>
-    <p th:text="${shop.getName()}"><b>Название магазина</b></p>
-    <br/>
-    <div class="product-category">
-      <p><b>Категории:</b></p>
-      <ul th:each="category : ${item.getCategories()}">
-        <li th:text="${category}"></li>
-      </ul>
-      <br/>
-      <b th:text="${item.getName()}">Название товара</b>
-      <div class="product-configuration">
-        <hr/>
-        <div class="product-description">
-          <p th:text="${item.getDescription()}">Описание товара</p>
-        </div>
-        <hr/>
-        <!-- Product Pricing -->
-        <div class="product-price">
-
-          <p th:text="${item.getPrice()}">Стоимость товара</p>
-
-          <!--------------   этот блок с рассчетом скидки для авторизованных пользователей-->
-          <div sec:authorize="isAuthenticated()">
-            <div>
-              <p><b>С учетом скидки:</b></p>
-              <div
-                      th:if="${item.getPrice() > discount.getMinOrder() && discount.getFixedDiscount() != 0}"
-                      th:text="${item.getPrice() - discount.getFixedDiscount()}">
-              </div>
-              <div
-                      th:if="${item.getPrice() > discount.getMinOrder() && discount.getFixedDiscount() == 0}"
-                      th:text="${((100 - discount.getPercentage()) * item.getPrice()) / 100}">
-              </div>
-            </div>
-          </div>
-          <!-------------------------------------------------------------------------------------------------------->
-        </div>
-        <br/>
-        <div>
-          <label for="itemQuant">Количество:</label>
-          <input class="form-control" id="itemQuant" min="1"
-                 th:value="${cartItem!=null}?${cartItem.getQuantity()} :1" type="number">
-        </div>
-
-        <!-- Кнопки в избранное, добавить в корзину, перейти в корзину показываем авторизованным пользователям-->
-        <div sec:authorize="isAuthenticated()">
-          <div class="form-group">
-            <button class="btn btn-info btn-block" th:attr="onclick=|addItemToFavorites('${item.id}')|">
-              Добавить в избранное
-            </button>
-          </div>
-          <div class="form-group">
-            <button class="btn btn-primary btn-block"
-                    th:attr="onclick=|addCartItem('${item.id}','${shop.id}')|">Добавить
-              в корзину
-            </button>
-          </div>
-          <div class="form-group">
-            <a th:href="@{/cart}">
-              <button class="btn btn-primary btn-block" id="toCart">Перейти в корзину</button>
+    <!---------- Left Column / Image ---------->
+    <div class="col-md-6 bg-light">
+        <div class="product-image">
+            <a href="">
+                <img height="669" th:src="${item.getImages()[0]}" width="669">
             </a>
-          </div>
         </div>
-        <!--        -------------------------------------------------------------------------------------->
-        <div class="form-group">
-          <a th:href="@{/}">
-            <button class="btn btn-secondary btn-block" id="toHome">На главную страницу</button>
-          </a>
-        </div>
-        <div sec:authorize="!isAuthenticated()">
-          <form>
-            <fieldset>
-              <a href="/login">Авторизуйтесь</a>, чтобы добавить товар в корзину или оставить отзыв
-            </fieldset>
-          </form>
-        </div>
-      </div>
     </div>
-  </div>
-  <div id="favItem" th:data-itemId="${item.getId()}"></div>
+
+    <!---------- Right Column ---------->
+    <div class="col-md-6 bg-white">
+        <br/>
+        <p th:text="${shop.getName()}"><b>Название магазина</b></p>
+        <br/>
+        <div class="product-category">
+            <p><b>Категории:</b></p>
+            <ul th:each="category : ${item.getCategories()}">
+                <li th:text="${category}"></li>
+            </ul>
+            <br/>
+            <b th:text="${item.getName()}">Название товара</b>
+            <div class="product-configuration">
+                <hr/>
+                <div class="product-description">
+                    <p th:text="${item.getDescription()}">Описание товара</p>
+                </div>
+                <hr/>
+                <!-- Product Pricing -->
+                <div class="product-price">
+
+                    <p th:text="${item.getPrice()}">Стоимость товара</p>
+
+                    <!--------------   этот блок с рассчетом скидки для авторизованных пользователей-->
+                    <div sec:authorize="isAuthenticated()">
+                        <div>
+                            <p><b>С учетом скидки:</b></p>
+                            <div
+                                    th:if="${item.getPrice() > discount.getMinOrder() && discount.getFixedDiscount() != 0}"
+                                    th:text="${item.getPrice() - discount.getFixedDiscount()}">
+                            </div>
+                            <div
+                                    th:if="${item.getPrice() > discount.getMinOrder() && discount.getFixedDiscount() == 0}"
+                                    th:text="${((100 - discount.getPercentage()) * item.getPrice()) / 100}">
+                            </div>
+                        </div>
+                    </div>
+                    <!-------------------------------------------------------------------------------------------------------->
+                </div>
+                <br/>
+                <div>
+                    <label for="itemQuant">Количество:</label>
+                    <input class="form-control" id="itemQuant" min="1"
+                           th:value="${cartItem!=null}?${cartItem.getQuantity()} :1" type="number">
+                </div>
+
+                <!-- Кнопки в избранное, добавить в корзину, перейти в корзину показываем авторизованным пользователям-->
+                <div sec:authorize="isAuthenticated()">
+                    <div class="form-group mt-2">
+                        <button class="btn btn-info btn-block" th:attr="onclick=|addItemToFavorites('${item.id}')|">
+                            Добавить в избранное
+                        </button>
+                    </div>
+                    <div class="form-group mt-2">
+                        <button class="btn btn-primary btn-block"
+                                th:attr="onclick=|addCartItem('${item.id}','${shop.id}')|">Добавить в корзину
+                        </button>
+                    </div>
+                    <div class="form-group mt-2">
+                        <a th:href="@{/cart}">
+                            <button class="btn btn-primary btn-block" id="toCart">Перейти в корзину</button>
+                        </a>
+                    </div>
+                </div>
+                <!--        -------------------------------------------------------------------------------------->
+                <div class="form-group mt-2">
+                    <a th:href="@{/}">
+                        <button class="btn btn-secondary btn-block" id="toHome">На главную страницу</button>
+                    </a>
+                </div>
+                <div sec:authorize="isAuthenticated()">
+                    <div class="form-group mt-2 mb-2">
+                        <button class="btn btn-warning" id="messageBtn">Написать продавцу</button>
+                    </div>
+                </div>
+
+                <!--Modal-->
+                <div class="modal fade" id="messageModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-md" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="messageModalLabel">Your message</h4>
+                                <button class="btn btn-group" id="closeBtn" data-dismiss="modal">x</button>
+                            </div>
+                            <div class="modal-body">
+                                <form th:method="POST" th:action="@{/messages}" th:object="${newMessage}">
+                                    <br>
+                                    <div class="form-group">
+                                        <textarea rows="4" name="textMessage" th:id="textMessage"
+                                                  placeholder="Your message">
+                                        </textarea>
+                                        <br>
+                                        <br>
+                                        <div class="form-group">
+                                            <button class="btn btn-warning btn-block"
+                                                    th:name="itemId"
+                                                    th:value="${item.id}">Отправить
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div sec:authorize="!isAuthenticated()">
+                    <form>
+                        <fieldset>
+                            <a href="/login">Авторизуйтесь</a>, чтобы добавить товар в корзину или оставить отзыв
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="favItem" th:data-itemId="${item.getId()}"></div>
 </div>
+<br>
 <br>
 <!--Вывод всех отзывов о товаре -->
 <div th:each="review : ${reviews}">
-  <form>
-    <fieldset>
-      <legend>Отзыв</legend>
-      <h6>Имя пользователя:</h6>
-      <p th:text="${review.user.getUsername()}"></p>
-      <h6>Дата отзыва:</h6>
-      <p th:text="${review.date}"></p>
-      <h6>Рейтинг:</h6>
-      <div class="rating-result">
-        <span class=active th:each="n: ${#numbers.sequence(1, review.rating)}"></span>
-        <span th:each="n: ${#numbers.sequence(1, 5 - review.rating, 1)}"></span>
-      </div>
-      <h6>Достоинства:</h6>
-      <p th:text="${review.dignity}"></p>
-      <h6>Недостатки:</h6>
-      <p th:text="${review.flaw}"></p>
-      <h6>Текст отзыва:</h6>
-      <p th:text="${review.text}"></p>
-    </fieldset>
-  </form>
-  <br>
+    <form>
+        <fieldset>
+            <legend>Отзыв</legend>
+            <h6>Имя пользователя:</h6>
+            <p th:text="${review.user.getUsername()}"></p>
+            <h6>Дата отзыва:</h6>
+            <p th:text="${review.date}"></p>
+            <h6>Рейтинг:</h6>
+            <div class="rating-result">
+                <span class=active th:each="n: ${#numbers.sequence(1, review.rating)}"></span>
+                <span th:each="n: ${#numbers.sequence(1, 5 - review.rating, 1)}"></span>
+            </div>
+            <h6>Достоинства:</h6>
+            <p th:text="${review.dignity}"></p>
+            <h6>Недостатки:</h6>
+            <p th:text="${review.flaw}"></p>
+            <h6>Текст отзыва:</h6>
+            <p th:text="${review.text}"></p>
+        </fieldset>
+    </form>
+    <br>
 </div>
 <div sec:authorize="isAuthenticated()">
-  <!--Добавление нового отзыва о товаре -->
-  <form th:action="@{/product/{id}(id=${item.getId()})}" th:method="POST" th:object="${newReview}">
-    <fieldset>
-      <legend>Отзыв о товаре</legend>
-      <div class="rating-area">
-        <input id="star-5" name="rating" type="radio" value="5">
-        <label for="star-5" title="Оценка «5»"></label>
-        <input id="star-4" name="rating" type="radio" value="4">
-        <label for="star-4" title="Оценка «4»"></label>
-        <input id="star-3" name="rating" type="radio" value="3">
-        <label for="star-3" title="Оценка «3»"></label>
-        <input id="star-2" name="rating" type="radio" value="2">
-        <label for="star-2" title="Оценка «2»"></label>
-        <input id="star-1" name="rating" type="radio" value="1">
-        <label for="star-1" title="Оценка «1»"></label>
-      </div>
-      <label for="4">Достоинства</label>
-      <textarea id="4" rows="4" th:field="*{dignity}"></textarea>
-      <label for="5">Недостатки</label>
-      <textarea id="5" rows="4" th:field="*{flaw}"></textarea>
-      <label for="6">Текст отзыва</label>
-      <textarea id="6" rows="6" th:field="*{text}"></textarea>
-      <div class="form-group d-grid mt-1">
-        <button class="btn btn-primary d-block mx-auto" style="width: 100px;" type="submit">Оставить</button>
-      </div>
-    </fieldset>
-  </form>
+    <!--Добавление нового отзыва о товаре -->
+    <form th:action="@{/product/{id}(id=${item.getId()})}" th:method="POST" th:object="${newReview}">
+        <fieldset>
+            <legend>Отзыв о товаре</legend>
+            <div class="rating-area">
+                <input id="star-5" name="rating" type="radio" value="5">
+                <label for="star-5" title="Оценка «5»"></label>
+                <input id="star-4" name="rating" type="radio" value="4">
+                <label for="star-4" title="Оценка «4»"></label>
+                <input id="star-3" name="rating" type="radio" value="3">
+                <label for="star-3" title="Оценка «3»"></label>
+                <input id="star-2" name="rating" type="radio" value="2">
+                <label for="star-2" title="Оценка «2»"></label>
+                <input id="star-1" name="rating" type="radio" value="1">
+                <label for="star-1" title="Оценка «1»"></label>
+            </div>
+            <label for="4">Достоинства</label>
+            <textarea id="4" rows="4" th:field="*{dignity}"></textarea>
+            <label for="5">Недостатки</label>
+            <textarea id="5" rows="4" th:field="*{flaw}"></textarea>
+            <label for="6">Текст отзыва</label>
+            <textarea id="6" rows="6" th:field="*{text}"></textarea>
+            <div class="form-group d-grid mt-1">
+                <button class="btn btn-primary d-block mx-auto" style="width: 100px;" type="submit">Оставить</button>
+            </div>
+        </fieldset>
+    </form>
 </div>
 
 <script>
-  $(async function () {
-    await favoriteItem()
-  })
-
-  async function favoriteItem() {
-    let form = $("#favItem");
-    let itemId = form.attr("data-itemId");
-
-    await favoriteButtonItem(itemId);
-  }
-
-  async function addCartItem(itemId, shopId) {
-    let quant = document.getElementById("itemQuant").value;
-    let url = new URL("http://localhost:8888/api/cart/add")
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json; charset=utf-8",
-      },
-      body: JSON.stringify({
-        quantity: quant,
-        item: {
-          id: itemId
-        },
-        shop: {
-          id: shopId
-        },
-      })
+    $(async function () {
+        await favoriteItem()
     })
-  }
+
+    async function favoriteItem() {
+        let form = $("#favItem");
+        let itemId = form.attr("data-itemId");
+
+        await favoriteButtonItem(itemId);
+    }
+
+    async function addCartItem(itemId, shopId) {
+        let quant = document.getElementById("itemQuant").value;
+        let url = new URL("http://localhost:8888/api/cart/add")
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            body: JSON.stringify({
+                quantity: quant,
+                item: {
+                    id: itemId
+                },
+                shop: {
+                    id: shopId
+                },
+            })
+        })
+    }
+
+    $('#messageBtn').on('click', function (e) {
+        e.preventDefault();
+        $('#messageModal').modal('show');
+    })
+    $('#closeBtn').on('click', function (e) {
+        e.preventDefault();
+        $('#messageModal').modal('hide');
+    })
+
+
+
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
@@ -206,5 +257,6 @@
 <script type="text/javascript" th:src="@{/js/favorites.js}" src="../static/js/favorites.js"></script>
 
 </div>
+
 </body>
 </html>

@@ -52,12 +52,14 @@ public interface ShopMapper {
     }
 
     default byte[] map(String logoarray) {
-        String[] stringBytesArray = logoarray.split(",");
-        byte[] picture = new byte[stringBytesArray.length];
-        for(int i = 0; i < picture.length; i++) {
-            picture[i] = Byte.parseByte(stringBytesArray[i].trim());
-        }
-        return picture;
+        if (logoarray != null) {
+            String[] stringBytesArray = logoarray.split(",");
+            byte[] picture = new byte[stringBytesArray.length];
+            for (int i = 0; i < picture.length; i++) {
+                picture[i] = Byte.parseByte(stringBytesArray[i].trim());
+            }
+            return picture;
+        } else return null;
     }
 
     default Long map(Shop shop) {

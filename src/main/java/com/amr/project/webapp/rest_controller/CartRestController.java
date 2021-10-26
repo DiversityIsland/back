@@ -88,36 +88,6 @@ public class CartRestController {
         return ResponseEntity.ok().build();
     }
 
-//    @Transactional
-//    @PostMapping(value = "/add")
-//    public ResponseEntity<Void> addItemToCart(@RequestBody CartItemDto cartItemDto) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if(authentication == null || authentication instanceof AnonymousAuthenticationToken) {
-//            throw new AccessDeniedException("Вам нужно авторизоваться для доступа к корзине");
-//        }
-//        User user = userService.findByUsername(authentication.getName()).get();
-//        cartItemDto.setUser(userMapper.userToDto(user));
-//
-//        CartItem cartItem;
-//        if(cartItemService.findByItemAndShopAndUser(
-//                cartItemDto.getItem().getId(),
-//                cartItemDto.getUser().getId(),
-//                cartItemDto.getShop().getId()).isPresent()) {
-//            cartItem = cartItemService.findByItemAndShopAndUser(
-//                    cartItemDto.getItem().getId(),
-//                    cartItemDto.getUser().getId(),
-//                    cartItemDto.getShop().getId()).get();
-//            cartItemDto.setQuantity(cartItem.getQuantity() + cartItemDto.getQuantity());
-//            updateCartItemQuantity(cartItem.getId(), cartItemDto);
-//        } else {
-//            cartItem = cartItemMapper.dtoToCartItem(cartItemDto);
-//            cartItemService.persist(cartItem);
-//            LOGGER.info(String.format("Пользователь с id %d успешно добавил товар с id %d в корзину", cartItem.getUser().getId(),
-//                    cartItem.getId()));
-//        }
-//        return ResponseEntity.ok().body(null);
-//    }
-
     @Transactional
     @PostMapping(value = "/add")
     public ResponseEntity<Void> addItemToCart(@RequestBody CartItemDto cartItemDto) {

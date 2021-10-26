@@ -24,5 +24,13 @@ public class UserDaoImpl extends ReadWriteDAOImpl<User, Long> implements UserDao
                 .stream()
                 .findAny();
     }
+
+    @Override
+    public Optional<User> findUserById(Long id) {
+        return entityManager.createQuery("SELECT u from User u where u.id = :id", User.class)
+                .setParameter("id", id).getResultList().stream().findAny();
+    }
+
+
 }
 
