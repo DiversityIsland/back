@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class MainPageItemServiceImpl extends ReadWriteServiceImpl<Item, Long> implements MainPageItemService {
 
     private final MainPageItemsDao mainPageItemsDAO;
-    private final  ItemMapper itemMapper;
+    private final ItemMapper itemMapper;
 
     @Autowired
     public MainPageItemServiceImpl(MainPageItemsDao mainPageItemsDAO, ItemMapper itemMapper) {
@@ -39,5 +39,21 @@ public class MainPageItemServiceImpl extends ReadWriteServiceImpl<Item, Long> im
     @Override
     public List<ItemDto> findItems() {
         return itemMapper.toItemsDto(mainPageItemsDAO.findItems());
+    }
+
+    @Override
+    public Long findLastPageItemsByCategoryId(Long id, int pageSize) {
+        Long countTotalEl = mainPageItemsDAO.findCountItemsByCategoryId(id);
+
+        long lastPageNum;
+        if (countTotalEl % pageSize == 0) {
+            return lastPageNum = countTotalEl / pageSize;
+        }
+        return lastPageNum = (countTotalEl / pageSize) + 1;
+    }
+
+    @Override
+    public List<ItemDto> findItemsByCategoryIdWithPagination(Long id, int pageNum, int pageSize) {
+        return itemMapper.toItemsDto(mainPageItemsDAO.findItemsByCategoryIdWithPagination(id, pageNum, pageSize));
     }
 }

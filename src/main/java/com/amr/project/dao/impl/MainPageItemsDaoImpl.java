@@ -16,7 +16,8 @@ public class MainPageItemsDaoImpl extends ReadWriteDAOImpl<Item, Long> implement
     @Override
     public List<Item> findItemsByCategoryId(Long categoryId) {
         return entityManager.createQuery("SELECT i FROM Item i JOIN i.categories c where c.id = :id", Item.class)
-                .setParameter("id", categoryId).getResultList();
+                .setParameter("id", categoryId)
+                .getResultList();
     }
 
     @Override
@@ -28,7 +29,23 @@ public class MainPageItemsDaoImpl extends ReadWriteDAOImpl<Item, Long> implement
 
     @Override
     public List<Item> findItems() {
-        return entityManager.createQuery("SELECT i FROM Item i WHERE i.isModerateAccept = true AND i.isModerated = true")
+        return entityManager.createQuery("SELECT i FROM Item i WHERE i.isModerateAccept = true AND i.isModerated = true", Item.class)
+                .getResultList();
+    }
+
+    @Override
+    public Long findCountItemsByCategoryId(Long id) {
+        return (Long) entityManager.createQuery("SELECT COUNT (i.id) FROM Item i JOIN i.categories c where c.id = :id")
+                .setParameter("id", id)
+                .getSingleResult();
+    }
+
+    @Override
+    public List<Item> findItemsByCategoryIdWithPagination(Long id, int pageNum, int pageSize) {
+        return entityManager.createQuery("SELECT i FROM Item i JOIN i.categories c where c.id = :id", Item.class)
+                .setParameter("id", id)
+                .setFirstResult((pageNum-1) * pageSize)
+                .setMaxResults(pageSize)
                 .getResultList();
     }
 }

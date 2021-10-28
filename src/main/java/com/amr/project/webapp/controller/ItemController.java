@@ -23,13 +23,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class ItemController {
 
-    private ItemService itemService;
-    private CartItemService cartItemService;
-    private UserService userService;
-    private ItemMapper itemMapper;
-    private CartItemMapper cartItemMapper;
-    private ShopMapper shopMapper;
-    private DiscountService discountService;
+    private final ItemService itemService;
+    private final CartItemService cartItemService;
+    private final UserService userService;
+    private final ItemMapper itemMapper;
+    private final CartItemMapper cartItemMapper;
+    private final ShopMapper shopMapper;
+    private final DiscountService discountService;
     private final ReviewService reviewService;
 
     @Autowired
