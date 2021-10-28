@@ -12,7 +12,6 @@ import com.amr.project.model.entity.User;
 import com.amr.project.service.abstracts.ChatService;
 import com.amr.project.service.abstracts.MessageService;
 import com.amr.project.service.abstracts.UserService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +29,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@RequestMapping("/api")
-@Slf4j
+@RequestMapping("/api/messenger")
 @RestController
 public class MessengerRestController {
 
@@ -39,33 +37,25 @@ public class MessengerRestController {
     private final UserService userService;
     private final MessageService messageService;
     private final ChatService chatService;
-    private final MessageMapper messageMapper;
-    private final UserMapper userMapper;
-    private final ChatMapper chatMapper;
 
     @Autowired
     public MessengerRestController(SimpMessagingTemplate simpMessagingTemplate,
                                    UserService userService,
                                    MessageService messageService,
-                                   ChatService chatService,
-                                   MessageMapper messageMapper,
-                                   UserMapper userMapper, ChatMapper chatMapper) {
+                                   ChatService chatService) {
         this.simpMessagingTemplate = simpMessagingTemplate;
         this.userService = userService;
         this.messageService = messageService;
         this.chatService = chatService;
-        this.messageMapper = messageMapper;
-        this.userMapper = userMapper;
-        this.chatMapper = chatMapper;
     }
 
     @MessageMapping("/chat")
-    public void processMessage(MessageDto messageDto) {
-        User from = userService.getByKey(messageDto.getFrom());
-        User to = userService.getByKey(messageDto.getTo());
+    public void processMessage(MessageDto receivedMessage) {
+        User from = userService.getByKey(receivedMessage.getFrom());
+        User to = userService.getByKey(receivedMessage.getTo());
         Chat chat;
-        if (messageDto.getChat() != null) {
-            chat = chatService.getByKey(messageDto.getChat());
+        if (receivedMessage.getChat() != null) {
+            chat = chatService.getByKey(receivedMessage.getChat());
         } else {
             chat = new Chat(List.of(from, to));
             chat.setMessages(new ArrayList<>());
@@ -75,76 +65,68 @@ public class MessengerRestController {
                 .from(from)
                 .to(to)
                 .chat(chat)
-                .textMessage(messageDto.getTextMessage())
+                .textMessage(receivedMessage.getTextMessage())
                 .build();
 
         chat.getMessages().add(message);
         chatService.update(chat);
         if (chat.getId() == null) {
-            messageDto.setChat(chatService.findChatByHash(chat.getHash()).getId());
+            receivedMessage.setChat(chatService.findChatByHash(chat.getHash()).getId());
         }
-        messageDto.setId(messageService.getLastMessage().orElse(new Message()).getId());
-        simpMessagingTemplate.convertAndSend("/topic/messages/" + messageDto.getTo(), messageDto);
+        receivedMessage.setId(messageService.getLastMessage().orElse(new Message()).getId());
+        simpMessagingTemplate.convertAndSend("/topic/messages/" + receivedMessage.getTo(), receivedMessage);
     }
 
-    @GetMapping("/messenger/principal")
+    @GetMapping("/principal")
     public ResponseEntity<UserDto> getPrincipal(Principal principal) {
-        UserDto userDto = userMapper.userToDto(userService.findByUsername(principal.getName()).get());
+        UserDto userDto = UserMapper.INSTANCE.userToDto(userService.findByUsername(principal.getName()).get());
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
-    @GetMapping("/messenger/{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUserById(@PathVariable("userId") Long id) {
-        UserDto userDto = userMapper.userToDto(userService.getByKey(id));
+        UserDto userDto = UserMapper.INSTANCE.userToDto(userService.getByKey(id));
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
-    @GetMapping("/messenger/{toUserId}/{fromUserId}")
+    @GetMapping("/{toUserId}/{fromUserId}")
     public ResponseEntity<ChatDto> getChatByUsersId(@PathVariable("toUserId") Long toUserId,
                                                     @PathVariable("fromUserId") Long fromUserId) {
 
         User to = userService.getByKey(toUserId);
         User from = userService.getByKey(fromUserId);
         long hash = Stream.of(from, to).map(User::hashCode).mapToLong(h -> h).sum();
-        log.info("hashcode {}", hash);
-        ChatDto chatDto = chatMapper.toChatDto(chatService.findChatByHash(hash));
+        ChatDto chatDto = ChatMapper.INSTANCE.toChatDto(chatService.findChatByHash(hash));
         return new ResponseEntity<>(Objects.requireNonNullElseGet(chatDto, ChatDto::new), HttpStatus.OK);
     }
 
-    @GetMapping("/messenger/chat/{chatId}")
+    @GetMapping("/chat/{chatId}")
     public ResponseEntity<List<MessageDto>> getMessagesByChatId(@PathVariable("chatId") Long chatId) {
-        List<MessageDto> messages = messageMapper.toListMassageDto(messageService.findMessagesByChatId(chatId));
+        List<MessageDto> messages = MessageMapper.INSTANCE.toListMassageDto(messageService.findMessagesByChatId(chatId));
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 
-    @GetMapping("/messenger/private/chat/user/{id}")
+    @GetMapping("/private/chat/user/{id}")
     public ResponseEntity<List<UserDto>> getUsersConnectWithCurrentUser(@PathVariable("id") Long currentId) {
 
         List<Chat> chats = chatService.findChatsByUserId(currentId);
-        List<UserDto> users = userMapper.toListUserDto(chats.stream().map(Chat::getId)
+        List<UserDto> users = UserMapper.INSTANCE.toListUserDto(chats.stream().map(Chat::getId)
                 .map(id -> userService.findUserConnectWithCurrentUserByChatId(id, currentId))
                 .collect(Collectors.toList()));
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/messenger/search/{searchName}")
+    @GetMapping("/search/{searchName}")
     public ResponseEntity<Long> getLastPageNumBySearchName(@PathVariable String searchName) {
-        long countTotalEl = userService.findCountTotalElementBySearchName(searchName);
-        long lastPageNum;
         int pageSize = 4;
-        if (countTotalEl % pageSize == 0) {
-            lastPageNum = countTotalEl / pageSize;
-        } else {
-            lastPageNum = (countTotalEl / pageSize) + 1;
-        }
-        log.info("Last page number {}", lastPageNum);
+        long lastPageNum = userService.getLastPageNumBySearchName(searchName, pageSize);
         return new ResponseEntity<>(lastPageNum, HttpStatus.OK);
     }
 
-    @GetMapping("/messenger/search/{searchName}/{pageNum}")
+    @GetMapping("/search/{searchName}/{pageNum}")
     public ResponseEntity<List<UserDto>> getUsersBySearchNameWithPagination(@PathVariable String searchName, @PathVariable Integer pageNum) {
         int pageSize = 4;
-        List<UserDto> usersDto = userMapper.toListUserDto(userService.findUserBySearchNameWithPagination(searchName, pageNum, pageSize));
+        List<UserDto> usersDto = UserMapper.INSTANCE.toListUserDto(userService.findUserBySearchNameWithPagination(searchName, pageNum, pageSize));
         return new ResponseEntity<>(usersDto, HttpStatus.OK);
     }
 }
