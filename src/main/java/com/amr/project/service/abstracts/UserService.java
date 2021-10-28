@@ -11,6 +11,6 @@ public interface UserService extends ReadWriteService<User, Long> {
     Optional<User> findByEmail(String email);
     void updateUserOnUserPage(User user, UserDto userDto);
     User findUserConnectWithCurrentUserByChatId(Long chatId, Long currentId);
-    Long findCountTotalElementBySearchName(String name);
+    Long getLastPageNumBySearchName(String name, int pageSize);
     List<User> findUserBySearchNameWithPagination(String name, int pageNum, int pageSize);
 }

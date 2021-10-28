@@ -90,14 +90,19 @@ public class UserServiceImpl extends ReadWriteServiceImpl<User, Long> implements
     }
 
     @Override
-    public Long findCountTotalElementBySearchName(String name) {
-        return userDao.findCountTotalElementBySearchName(name);
+    public Long getLastPageNumBySearchName(String name, int pageSize) {
+        Long countTotalEl =  userDao.findCountTotalElementBySearchName(name);
+        long lastPageNum;
+        if (countTotalEl % pageSize == 0) {
+            lastPageNum = countTotalEl / pageSize;
+        } else {
+            lastPageNum = (countTotalEl / pageSize) + 1;
+        }
+        return lastPageNum;
     }
 
     @Override
     public List<User> findUserBySearchNameWithPagination(String name, int pageNum, int pageSize) {
         return userDao.findUserBySearchNameWithPagination(name, pageNum, pageSize);
     }
-
-
 }
