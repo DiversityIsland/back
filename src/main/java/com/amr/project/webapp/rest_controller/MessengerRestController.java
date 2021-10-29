@@ -80,7 +80,7 @@ public class MessengerRestController {
             receivedMessage.setChat(chatService.findChatByHash(chat.getHash()).getId());
         }
         receivedMessage.setId(messageService.getLastMessage().orElse(new Message()).getId());
-        simpMessagingTemplate.convertAndSend("/topic/messages/" + receivedMessage.getTo(), receivedMessage);
+        simpMessagingTemplate.convertAndSend("/topic/messenger/" + receivedMessage.getTo(), receivedMessage);
     }
 
     @GetMapping("/principal")

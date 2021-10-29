@@ -130,7 +130,7 @@ function connect(id) {
     let socket = new SockJS("/chat");
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        stompClient.subscribe('/topic/messages/' + id, function (message) {
+        stompClient.subscribe('/topic/messenger/' + id, function (message) {
             showMessage(JSON.parse(message.body))
         });
     });
