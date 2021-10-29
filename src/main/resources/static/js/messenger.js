@@ -60,7 +60,6 @@ async function search() {
 async function getLastPageNum() {
     const res = await fetch(urlGetLastPageNumber + searchNameValue)
     lastPageNum = await res.json()
-    console.log(lastPageNum)
 }
 //след стр
 async function showNextPage(pageNum) {
@@ -131,8 +130,7 @@ function connect(id) {
     let socket = new SockJS("/chat");
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/messages/' + id, function (message) {
+        stompClient.subscribe('/topic/messenger/' + id, function (message) {
             showMessage(JSON.parse(message.body))
         });
     });
@@ -156,7 +154,6 @@ async function showMessage(message) {
     if (selectedUserId === message.from && chatId === null) {
         chatId = message.chat
         getUsersConnectWithCurrentUser(principalObj.id)
-        console.log(chatId)
     }
 }
 
@@ -182,7 +179,6 @@ function selectUser(toUserId) {
         return false
     }
     selectedUserId = toUserId;
-    console.log("User selected id: " + selectedUserId)
 
     getUser(toUserId).then((u) => {
         toUserName = u.firstName + " " + u.lastName
@@ -214,7 +210,6 @@ function selectUser(toUserId) {
         } else {
             chatId = chat.id
         }
-        console.log("chatId: " + chatId)
     }).then(() => {
         if (chatId != null) {
             getMessagesByChatId(chatId).then((messages) => {
@@ -287,7 +282,6 @@ function wrapperSendMessage() {
             setTimeout(() => {
                 getChat(selectedUserIdFinalFromSendMsg).then(chat => {
                     chatId = chat.id
-                    console.log(chatId)
                 })
 
                 setTimeout(() => {
