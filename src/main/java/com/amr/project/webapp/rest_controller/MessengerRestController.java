@@ -25,9 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RequestMapping("/api/messenger")
 @RestController
@@ -98,12 +95,8 @@ public class MessengerRestController {
     @GetMapping("/{toUserId}/{fromUserId}")
     public ResponseEntity<ChatDto> getChatByUsersId(@PathVariable("toUserId") Long toUserId,
                                                     @PathVariable("fromUserId") Long fromUserId) {
-
-        User to = userService.getByKey(toUserId);
-        User from = userService.getByKey(fromUserId);
-        long hash = Stream.of(from, to).map(User::hashCode).mapToLong(h -> h).sum();
-        ChatDto chatDto = chatMapper.toChatDto(chatService.findChatByHash(hash));
-        return new ResponseEntity<>(Objects.requireNonNullElseGet(chatDto, ChatDto::new), HttpStatus.OK);
+        ChatDto chatDto = chatMapper.toChatDto(chatService.findChatByToUserIdAndFromUserId(toUserId, fromUserId));
+        return new ResponseEntity<>(chatDto, HttpStatus.OK);
     }
 
     @GetMapping("/chat/{chatId}")
@@ -114,11 +107,7 @@ public class MessengerRestController {
 
     @GetMapping("/private/chat/user/{id}")
     public ResponseEntity<List<UserDto>> getUsersConnectWithCurrentUser(@PathVariable("id") Long currentId) {
-
-        List<Chat> chats = chatService.findChatsByUserId(currentId);
-        List<UserDto> users = userMapper.toListUserDto(chats.stream().map(Chat::getId)
-                .map(id -> userService.findUserConnectWithCurrentUserByChatId(id, currentId))
-                .collect(Collectors.toList()));
+        List<UserDto> users = userMapper.toListUserDto(userService.findConnectUsersById(currentId));
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
