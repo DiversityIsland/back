@@ -1,10 +1,9 @@
-const url = "http://localhost:8888"
-const urlGetLastPageNumber = "http://localhost:8888/api/messenger/search/" //searchName
-const urlGetPageUserBySearchNameAndPageNum = "http://localhost:8888/api/messenger/search/"  // searchName and page num
-const urlGetUser = "http://localhost:8888/api/messenger/" //id or principal
-const urlGetUsersConnectWithCurrentUser = "http://localhost:8888/api/messenger/private/chat/user/" // get users connect with current user by id
-const urlGetChatToIdAndFromId = "http://localhost:8888/api/messenger/" // + toId and fromId
-const urlGetMessagesByChatId = "http://localhost:8888/api/messenger/chat/" // + chatId
+const urlGetLastPageNumber = "/api/messenger/search/" // + /searchName
+const urlGetPageUserBySearchNameAndPageNum = "/api/messenger/search/"  // + /searchName/pageNum
+const urlGetUser = "/api/messenger/" // + /id or /principal
+const urlGetUsersConnectWithCurrentUser = "/api/messenger/private/chat/user/" // get users connect with current user by id
+const urlGetChatToIdAndFromId = "/api/messenger/" // + /toId/fromId
+const urlGetMessagesByChatId = "/api/messenger/chat/" // + chatId
 
 
 const usersList = document.querySelector("#usersList")
@@ -301,7 +300,7 @@ function wrapperSendMessage() {
                                             </div>
                                         </li>`
                     })
-                }, 1000)
+                }, 900)
             }, 800)
         }
     })

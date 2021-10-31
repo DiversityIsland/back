@@ -83,13 +83,6 @@ public class UserServiceImpl extends ReadWriteServiceImpl<User, Long> implements
     }
 
     @Override
-    public User findUserConnectWithCurrentUserByChatId(Long chatId, Long currentId) {
-        return userDao.findUsersByChatId(chatId).stream()
-                .filter(u -> !u.getId().equals(currentId))
-                .findFirst().orElse(null);
-    }
-
-    @Override
     public Long getLastPageNumBySearchName(String name, int pageSize) {
         Long countTotalEl =  userDao.findCountTotalElementBySearchName(name);
         long lastPageNum;
@@ -104,5 +97,10 @@ public class UserServiceImpl extends ReadWriteServiceImpl<User, Long> implements
     @Override
     public List<User> findUserBySearchNameWithPagination(String name, int pageNum, int pageSize) {
         return userDao.findUserBySearchNameWithPagination(name, pageNum, pageSize);
+    }
+
+    @Override
+    public List<User> findConnectUsersById(Long currentId) {
+        return userDao.findConnectUsersById(currentId);
     }
 }

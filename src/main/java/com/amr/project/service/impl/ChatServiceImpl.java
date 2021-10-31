@@ -30,4 +30,9 @@ public class ChatServiceImpl extends ReadWriteServiceImpl<Chat, Long> implements
         return chatDao.findChatsByUserId(id);
     }
 
+    @Override
+    public Chat findChatByToUserIdAndFromUserId(Long toId, Long fromId) {
+        return chatDao.findChatByToUserIdAndFromUserId(toId, fromId);
+    }
+
 }

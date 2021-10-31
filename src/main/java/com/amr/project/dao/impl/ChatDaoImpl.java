@@ -18,10 +18,21 @@ public class ChatDaoImpl extends ReadWriteDAOImpl<Chat, Long> implements ChatDao
 
     @Override
     public List<Chat> findChatsByUserId(Long id) {
-        return entityManager.createQuery("SELECT c FROM Chat c LEFT JOIN c.members m WHERE m.id = :id", Chat.class)
+        return entityManager.createQuery("SELECT c FROM Chat c JOIN c.members m WHERE m.id = :id", Chat.class)
                 .setParameter("id", id)
                 .getResultList();
     }
 
+    @Override
+    public Chat findChatByToUserIdAndFromUserId(Long toId, Long fromId) {
+        String query = "SELECT * FROM chat c JOIN chat_members cm " +
+                "ON (c.id = cm.chat_id AND cm.members_id = :fromId) " +
+                "WHERE c.id IN (SELECT c2.id FROM chat c2 JOIN chat_members cm2 " +
+                "ON c2.id = cm2.chat_id AND cm2.members_id = :toId)";
 
+        return (Chat) entityManager.createNativeQuery(query, Chat.class)
+                .setParameter("fromId", fromId)
+                .setParameter("toId", toId)
+                .getResultStream().findFirst().orElse(new Chat());
+    }
 }
