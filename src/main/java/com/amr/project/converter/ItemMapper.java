@@ -20,7 +20,6 @@ import java.util.List;
         ReferenceImageMapper.class, ReferenceReviewMapper.class, ReviewMapper.class},
         componentModel = "spring")
 public interface ItemMapper {
-    ItemMapper INSTANCE = Mappers.getMapper(ItemMapper.class);
 
     @Mappings({@Mapping(source = "shop.id", target = "shopId")})
     ItemDto itemToItemDto(Item item);

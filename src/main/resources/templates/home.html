@@ -489,12 +489,12 @@
     })
 
     /**
-     * отправляет GET запрос на /home/category/id/firstPage = категории
+     * отправляет GET запрос на /home/category/id/firstPage/pageSize = категории
      * генерирует html из массива итемов на странице
      */
     async function searchByCategory(e) {
         const categoryId = $(e).attr("id");
-        const response = await fetch("api/mainpage/item/category/" + categoryId + "/1");
+        const response = await fetch("api/mainpage/item/category/" + categoryId + "/1/" + pageSize);
         if (response.ok) {
             let items = await response.json();
             /**

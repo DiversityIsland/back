@@ -1,10 +1,13 @@
 package com.amr.project.dao.impl;
 
 import com.amr.project.dao.abstracts.MainPageItemsDao;
+import com.amr.project.dao.util.SingleResultUtil;
 import com.amr.project.model.entity.Item;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
+import static com.amr.project.dao.util.SingleResultUtil.getSingleResultOrNull;
 
 @Repository
 public class MainPageItemsDaoImpl extends ReadWriteDAOImpl<Item, Long> implements MainPageItemsDao {
@@ -35,9 +38,9 @@ public class MainPageItemsDaoImpl extends ReadWriteDAOImpl<Item, Long> implement
 
     @Override
     public Long findCountItemsByCategoryId(Long id) {
-        return (Long) entityManager.createQuery("SELECT COUNT (i.id) FROM Item i JOIN i.categories c where c.id = :id")
-                .setParameter("id", id)
-                .getSingleResult();
+        return getSingleResultOrNull(entityManager.createQuery("SELECT COUNT (i.id) FROM Item i JOIN i.categories c where c.id = :id", Long.class)
+                .setParameter("id", id))
+                .orElse(0L);
     }
 
     @Override

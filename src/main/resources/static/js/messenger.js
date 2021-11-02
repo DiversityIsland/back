@@ -1,5 +1,5 @@
-const urlGetLastPageNumber = "/api/messenger/search/" // + /searchName
-const urlGetPageUserBySearchNameAndPageNum = "/api/messenger/search/"  // + /searchName/pageNum
+const urlGetLastPageNumber = "/api/messenger/search/" // + /searchName/pageSize
+const urlGetPageUserBySearchNameAndPageNum = "/api/messenger/search/"  // + /searchName/pageNum/pageSiz
 const urlGetUser = "/api/messenger/" // + /id or /principal
 const urlGetUsersConnectWithCurrentUser = "/api/messenger/private/chat/user/" // get users connect with current user by id
 const urlGetChatToIdAndFromId = "/api/messenger/" // + /toId/fromId
@@ -18,6 +18,7 @@ const paginationNext = document.querySelector("#paginNext")
 const paginationActivePage = document.querySelector("#activePageShow")
 
 
+const pageSize = 4
 let inputTextMessage
 let stompClient
 let principalObj
@@ -35,7 +36,7 @@ let activePage
 // поиск пользователя по имени
 async function search() {
     activePage = 1
-    const response = await fetch(urlGetPageUserBySearchNameAndPageNum + searchNameValue + "/" + activePage)
+    const response = await fetch(urlGetPageUserBySearchNameAndPageNum + searchNameValue + "/" + activePage + "/" + pageSize)
     const users = await response.json()
 
     if (users.length !== 0 ) {
@@ -57,12 +58,12 @@ async function search() {
 }
 // номер последней страницы пользователей
 async function getLastPageNum() {
-    const res = await fetch(urlGetLastPageNumber + searchNameValue)
+    const res = await fetch(urlGetLastPageNumber + searchNameValue + "/" + pageSize)
     lastPageNum = await res.json()
 }
 //след стр
 async function showNextPage(pageNum) {
-    const response = await fetch(urlGetPageUserBySearchNameAndPageNum + searchNameValueFinal + "/" + pageNum)
+    const response = await fetch(urlGetPageUserBySearchNameAndPageNum + searchNameValueFinal + "/" + pageNum + "/" + pageSize)
     const users = await response.json()
 
     activePage++
@@ -71,7 +72,7 @@ async function showNextPage(pageNum) {
 }
 //пред стр
 async function showPreviousPage(pageNum) {
-    const response = await fetch(urlGetPageUserBySearchNameAndPageNum + searchNameValueFinal + "/" + pageNum)
+    const response = await fetch(urlGetPageUserBySearchNameAndPageNum + searchNameValueFinal + "/" + pageNum + "/" + pageSize)
     const users = await response.json()
 
     activePage--

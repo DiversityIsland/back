@@ -6,14 +6,15 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.amr.project.dao.util.SingleResultUtil.getSingleResultOrNull;
+
 @Repository
 public class ChatDaoImpl extends ReadWriteDAOImpl<Chat, Long> implements ChatDao {
 
     @Override
     public Chat findChatByHash(Long hash) {
-        return entityManager.createQuery("SELECT c FROM Chat c WHERE c.hash = :hash", Chat.class)
-                .setParameter("hash", hash)
-                .getResultList().stream().findAny().orElse(null);
+        return getSingleResultOrNull(entityManager.createQuery("SELECT c FROM Chat c WHERE c.hash = :hash", Chat.class)
+                .setParameter("hash", hash)).orElse(null);
     }
 
     @Override
@@ -25,14 +26,12 @@ public class ChatDaoImpl extends ReadWriteDAOImpl<Chat, Long> implements ChatDao
 
     @Override
     public Chat findChatByToUserIdAndFromUserId(Long toId, Long fromId) {
-        String query = "SELECT * FROM chat c JOIN chat_members cm " +
-                "ON (c.id = cm.chat_id AND cm.members_id = :fromId) " +
-                "WHERE c.id IN (SELECT c2.id FROM chat c2 JOIN chat_members cm2 " +
-                "ON c2.id = cm2.chat_id AND cm2.members_id = :toId)";
+        String query = "SELECT c FROM Chat c JOIN c.members m ON m.id = :fromId " +
+                "WHERE c.id IN (SELECT c2.id FROM Chat c2 JOIN c2.members m2 ON m2.id = :toId)";
 
-        return (Chat) entityManager.createNativeQuery(query, Chat.class)
+        return getSingleResultOrNull(entityManager.createQuery(query, Chat.class)
                 .setParameter("fromId", fromId)
-                .setParameter("toId", toId)
-                .getResultStream().findFirst().orElse(new Chat());
+                .setParameter("toId", toId))
+                .orElse(new Chat());
     }
 }

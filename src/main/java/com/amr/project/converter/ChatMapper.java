@@ -8,8 +8,6 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface ChatMapper {
 
-    ChatMapper INSTANCE = Mappers.getMapper(ChatMapper.class);
-
     ChatDto toChatDto(Chat chat);
 
     Chat toChat(ChatDto chatDto);

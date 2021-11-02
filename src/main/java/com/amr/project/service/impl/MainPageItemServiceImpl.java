@@ -44,12 +44,11 @@ public class MainPageItemServiceImpl extends ReadWriteServiceImpl<Item, Long> im
     @Override
     public Long findLastPageItemsByCategoryId(Long id, int pageSize) {
         Long countTotalEl = mainPageItemsDAO.findCountItemsByCategoryId(id);
-
-        long lastPageNum;
+        if (countTotalEl == 0) return 1L;
         if (countTotalEl % pageSize == 0) {
-            return lastPageNum = countTotalEl / pageSize;
+            return countTotalEl / pageSize;
         }
-        return lastPageNum = (countTotalEl / pageSize) + 1;
+        return (countTotalEl / pageSize) + 1;
     }
 
     @Override

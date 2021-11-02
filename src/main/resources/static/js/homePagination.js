@@ -1,5 +1,5 @@
-const urlGetLastPageNum = "/api/mainpage/item/lastpage/category/" //  + id
-const urlGetPageByPageNum = "/api/mainpage/item/category/" // + id/pageNumber
+const urlGetLastPageNum = "/api/mainpage/item/lastpage/category/" //  + id/pageSize
+const urlGetPageByPageNum = "/api/mainpage/item/category/" // + id/pageNumber/pageSize
 
 const paginationNav = document.querySelector("#pagination_nav")
 
@@ -7,6 +7,7 @@ let activePageLi
 let prevPageLi
 let nextPageLi
 
+const pageSize = 5
 const firstPage = 1
 let activePage
 let nextPage
@@ -15,7 +16,7 @@ let lastPage
 let categoryIdGlobalVar
 
 async function firstPaginationLinksShow(categoryId) {
-    const response = await fetch(urlGetLastPageNum + categoryId)
+    const response = await fetch(urlGetLastPageNum + categoryId + "/" + pageSize)
     lastPage = await response.json()
     nextPage = activePage + 1
     prevPage = activePage - 1
@@ -42,7 +43,7 @@ async function firstPaginationLinksShow(categoryId) {
 }
 
 async function showPage(pageNum) {
-    const response = await fetch(urlGetPageByPageNum + categoryIdGlobalVar + "/" + pageNum)
+    const response = await fetch(urlGetPageByPageNum + categoryIdGlobalVar + "/" + pageNum + "/" + pageSize)
     const items = await response.json()
 
     let itemsByCategoryHTML = "";

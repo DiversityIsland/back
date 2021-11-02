@@ -14,8 +14,6 @@ import java.util.List;
 ImageMapper.class, ReadWriteService.class, CartItemMapper.class}, componentModel = "spring")
 public interface UserMapper {
 
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
-
     @Mapping(source = "address", target = "address")
     @Mapping(source = "images.picture", target = "logoarray")
     @Mapping(source = "images.url", target = "logo")

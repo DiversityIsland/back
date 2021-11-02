@@ -25,24 +25,21 @@ public class MainPageRestController {
     @GetMapping("/item/category/{id}")
     public ResponseEntity<List<ItemDto>> getItemDtoByCategoryId(@PathVariable("id") Long id) {
         List<ItemDto> itemsDto = mainPageItemService.findItemsByCategoryId(id);
-
         return new ResponseEntity<>(itemsDto, HttpStatus.OK);
     }
 
-    @GetMapping("/item/lastpage/category/{id}")
-    public ResponseEntity<Long> getLastPageNumItemsByCategoryId(@PathVariable Long id) {
-        int pageSize = 5;
+    @GetMapping("/item/lastpage/category/{id}/{pageSize}")
+    public ResponseEntity<Long> getLastPageNumItemsByCategoryId(@PathVariable Long id,
+                                                                @PathVariable Integer pageSize) {
         long lastPage = mainPageItemService.findLastPageItemsByCategoryId(id, pageSize);
-
         return new ResponseEntity<>(lastPage, HttpStatus.OK);
     }
 
-    @GetMapping("/item/category/{id}/{pagenum}")
-    public ResponseEntity<List<ItemDto>> getItemsByCategoryIdWithPagination(@PathVariable Long id, @PathVariable int pagenum) {
-        int pageSize = 5;
-
+    @GetMapping("/item/category/{id}/{pagenum}/{pageSize}")
+    public ResponseEntity<List<ItemDto>> getItemsByCategoryIdWithPagination(@PathVariable Long id,
+                                                                            @PathVariable Integer pagenum,
+                                                                            @PathVariable Integer pageSize) {
         List<ItemDto> itemsDto = mainPageItemService.findItemsByCategoryIdWithPagination(id, pagenum, pageSize);
-
         return new ResponseEntity<>(itemsDto, HttpStatus.OK);
     }
 }

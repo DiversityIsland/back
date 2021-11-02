@@ -111,17 +111,20 @@ public class MessengerRestController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/search/{searchName}")
-    public ResponseEntity<Long> getLastPageNumBySearchName(@PathVariable String searchName) {
-        int pageSize = 4;
+    @GetMapping("/search/{searchName}/{pageSize}")
+    public ResponseEntity<Long> getLastPageNumBySearchName(@PathVariable String searchName,
+                                                           @PathVariable Integer pageSize) {
+
         long lastPageNum = userService.getLastPageNumBySearchName(searchName, pageSize);
         return new ResponseEntity<>(lastPageNum, HttpStatus.OK);
     }
 
-    @GetMapping("/search/{searchName}/{pageNum}")
-    public ResponseEntity<List<UserDto>> getUsersBySearchNameWithPagination(@PathVariable String searchName, @PathVariable Integer pageNum) {
-        int pageSize = 4;
-        List<UserDto> usersDto = userMapper.toListUserDto(userService.findUserBySearchNameWithPagination(searchName, pageNum, pageSize));
+    @GetMapping("/search/{searchName}/{pageNum}/{pageSize}")
+    public ResponseEntity<List<UserDto>> getUsersBySearchNameWithPagination(@PathVariable String searchName,
+                                                                            @PathVariable Integer pageNum,
+                                                                            @PathVariable Integer pageSize) {
+        List<UserDto> usersDto = userMapper
+                .toListUserDto(userService.findUserBySearchNameWithPagination(searchName, pageNum, pageSize));
         return new ResponseEntity<>(usersDto, HttpStatus.OK);
     }
 }

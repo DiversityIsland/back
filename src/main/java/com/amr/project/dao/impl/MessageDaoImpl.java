@@ -8,14 +8,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import static com.amr.project.dao.util.SingleResultUtil.getSingleResultOrNull;
+
 @Repository
 public class MessageDaoImpl extends ReadWriteDAOImpl<Message, Long> implements MessageDao {
 
-
     @Override
     public Optional<Message> getLastMessage() {
-        return entityManager.createQuery("SELECT m FROM Message m ORDER BY m.id DESC", Message.class)
-                .getResultList().stream().findFirst();
+        return getSingleResultOrNull(entityManager.createQuery("SELECT m FROM Message m ORDER BY m.id DESC", Message.class));
     }
 
     @Override
