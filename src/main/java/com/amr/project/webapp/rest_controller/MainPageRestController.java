@@ -31,7 +31,7 @@ public class MainPageRestController {
 
     @GetMapping("/item/lastpage/category/{id}")
     public ResponseEntity<Long> getLastPageNumItemsByCategoryId(@PathVariable Long id) {
-        int pageSize = 2;
+        int pageSize = 5;
         long lastPage = mainPageItemService.findLastPageItemsByCategoryId(id, pageSize);
 
         return new ResponseEntity<>(lastPage, HttpStatus.OK);
@@ -39,7 +39,7 @@ public class MainPageRestController {
 
     @GetMapping("/item/category/{id}/{pagenum}")
     public ResponseEntity<List<ItemDto>> getItemsByCategoryIdWithPagination(@PathVariable Long id, @PathVariable int pagenum) {
-        int pageSize = 2;
+        int pageSize = 5;
 
         List<ItemDto> itemsDto = mainPageItemService.findItemsByCategoryIdWithPagination(id, pagenum, pageSize);
 
