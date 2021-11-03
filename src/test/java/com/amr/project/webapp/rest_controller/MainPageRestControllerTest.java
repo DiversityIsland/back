@@ -41,7 +41,7 @@ class MainPageRestControllerTest {
 
     @Test
     void getLastPageNumItemsByCategoryId() throws Exception {
-        mockMvc.perform(get("/api/mainpage/item/lastpage/category/{id}", 3))
+        mockMvc.perform(get("/api/mainpage/item/lastpage/category/{id}/{pageSize}", 3, 2))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json("2"));
@@ -50,7 +50,7 @@ class MainPageRestControllerTest {
     @Test
     void getItemsByCategoryIdWithPagination() throws Exception {
         ItemDto itemDto = getItemDtoById(14L);
-        mockMvc.perform(get("/api/mainpage/item/category/{id}/{pagenum}", 5, 2))
+        mockMvc.perform(get("/api/mainpage/item/category/{id}/{pagenum}/{pageSize}", 5, 2, 2))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(Arrays.asList(itemDto))));
