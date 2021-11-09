@@ -1,5 +1,6 @@
 package com.amr.project.model.entity;
 
+import com.amr.project.model.enums.PaymentStatus;
 import com.amr.project.model.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -55,4 +56,7 @@ public class Order {
     @Column(name = "buyer_phone")
     private String buyerPhone;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
 }

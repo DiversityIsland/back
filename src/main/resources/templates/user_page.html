@@ -1035,10 +1035,11 @@
                 insert_html += '<div class="row my-2">\n' +
                     '                            <div class="col-12 d-flex justify-content-between px-4">\n' +
                     '                                <div>Дата заказа: <b>' + orders[i].date + '</b></div>\n' +
-                    '                                <b>' + orders[i].status + '</b>\n' +
+                    '                                <div>Статус заказа/оплаты :<b>' + orders[i].status + '/' + orders[i].paymentStatus + '</b></div>\n' +
                     '                            </div>\n' +
                     '                            <div class="col-12 d-flex justify-content-between px-4">\n' +
                     '                                <div>Адрес доставки: <b>' + orders[i].country + ', г.' + orders[i].city + ', ул.' + orders[i].street + ', д.' + orders[i].house + '</b></div>\n' +
+
                     '                            </div>\n' +
                     '                            <div class="col-12 d-flex justify-content-between px-4">\n' +
                     '                                <div>Сумма заказа: <b>' + orders[i].total + '</b></div>\n' +

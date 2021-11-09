@@ -2,6 +2,7 @@ package com.amr.project.service.impl;
 
 import com.amr.project.model.entity.*;
 import com.amr.project.model.enums.Gender;
+import com.amr.project.model.enums.PaymentStatus;
 import com.amr.project.model.enums.Status;
 import com.amr.project.service.abstracts.*;
 import lombok.SneakyThrows;
@@ -945,6 +946,7 @@ public class TestDataEntityService {
                 .user(user1)
                 .buyerName(user1.getFirstName())
                 .buyerPhone(user1.getPhone())
+                .paymentStatus(PaymentStatus.PAYED)
                 .build();
         orderService.persist(order1);
 
@@ -958,6 +960,7 @@ public class TestDataEntityService {
                 .user(user2)
                 .buyerName(user2.getFirstName())
                 .buyerPhone(user2.getPhone())
+                .paymentStatus(PaymentStatus.WAITING)
                 .build();
         orderService.persist(order2);
 
@@ -971,6 +974,7 @@ public class TestDataEntityService {
                 .user(user3)
                 .buyerName(user3.getFirstName())
                 .buyerPhone(user3.getPhone())
+                .paymentStatus(PaymentStatus.PAYED)
                 .build();
         orderService.persist(order3);
 
@@ -984,6 +988,7 @@ public class TestDataEntityService {
                 .user(user1)
                 .buyerName(user1.getFirstName())
                 .buyerPhone(user1.getPhone())
+                .paymentStatus(PaymentStatus.PAYED)
                 .build();
         orderService.persist(order4);
 
@@ -997,6 +1002,7 @@ public class TestDataEntityService {
                 .user(user2)
                 .buyerName(user2.getFirstName())
                 .buyerPhone(user2.getPhone())
+                .paymentStatus(PaymentStatus.PAYED)
                 .build();
         orderService.persist(order5);
 
@@ -1010,6 +1016,7 @@ public class TestDataEntityService {
                 .user(user3)
                 .buyerName(user3.getFirstName())
                 .buyerPhone(user3.getPhone())
+                .paymentStatus(PaymentStatus.WAITING)
                 .build();
         orderService.persist(order6);
 
