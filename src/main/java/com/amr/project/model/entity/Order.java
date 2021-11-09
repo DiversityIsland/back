@@ -2,9 +2,7 @@ package com.amr.project.model.entity;
 
 import com.amr.project.model.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.stereotype.Component;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -16,10 +14,12 @@ import java.util.Collection;
 @Entity
 @Table(name = "orders")
 @NoArgsConstructor
+@AllArgsConstructor
 @ApiIgnore
 @Component
 @Getter
 @Setter
+@Builder
 public class Order {
 
     @Id

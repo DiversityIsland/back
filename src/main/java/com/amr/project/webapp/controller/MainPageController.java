@@ -50,7 +50,7 @@ public class MainPageController {
      * @return
      */
     @GetMapping
-    public String getPopularItemsAbdShop(Model model) throws UnsupportedEncodingException {
+    public String getPopularItemsAndShop(Model model) throws UnsupportedEncodingException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<User> user = userService.findByUsername(authentication.getName());
         if (authentication.isAuthenticated() && user.isPresent()) {

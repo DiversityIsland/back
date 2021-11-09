@@ -416,6 +416,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#2" id="orders_view_btn">Заказы</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#3" id="sales_view_btn">Продажи</a>
+                    </li>
                 </ul>
                 <button type="button" class="btn btn-success" id="add_shop_btn">Добавить магазин</button>
             </div>
@@ -442,6 +445,13 @@
 
                 </div>
 
+                <!--продажи-->
+                <div id="sales_view_panel" class="col-12 collapse">
+                    <div class="col-12 d-flex flex-wrap mt-3" id="sales_content_container">
+                        <p>Sales!</p>
+                    </div>
+                </div>
+
 
             </div>
         </div>
@@ -454,11 +464,14 @@
 <script>
     const shopViewBtn = $('#shop_view_btn');
     const orderViewBtn = $('#orders_view_btn');
+    const salesViewBtn = $('#sales_view_btn');
     const shopViewPanel = $('#shop_view_panel');
     const orderViewPanel = $('#order_view_panel');
+    const salesViewPanel = $('#sales_view_panel');
     const userPanelHead = $('#user_panel_head');
     const shopContentConteiner = $('#shop_content_container');
     const orderContentConteiner = $('#orders_container');
+    const salesContentContainer = $('#sales_content_container');
     const editProfile = $('#edit_profile_btn');
     const user_form = $('#update_user_form');
     const userUpdateBtn = $('#user_update_btn');
@@ -638,15 +651,22 @@
         $(shopViewBtn).on('click', function (e) {
             e.preventDefault();
             /*переключаем классы для отображения панели магазинов и скрытия панели заказов*/
-            toggleUserPanel($(this), orderViewBtn, shopViewPanel, orderViewPanel);
+            toggleUserPanel($(this), shopViewPanel, orderViewBtn, orderViewPanel, salesViewBtn, salesViewPanel);
             $(userPanelHead).html('Ваши магазины:');
         })
         $(orderViewBtn).on('click', function (e) {
             e.preventDefault();
             getOrders().then(orders => addOrdersOnPage(orders));
             /*переключаем классы для отображения панели заказов и скрытия панели магазинов*/
-            toggleUserPanel($(this), shopViewBtn, orderViewPanel, shopViewPanel);
+            toggleUserPanel($(this), orderViewPanel, shopViewBtn, shopViewPanel, salesViewBtn, salesViewPanel);
             $(userPanelHead).html('Ваши заказы:');
+        })
+        $(salesViewBtn).on('click', function (e) {
+            e.preventDefault();
+            getShops().then(shops => loadSalesReport(shops));
+            /*переключаем классы для отображения панели магазинов и скрытия панели заказов*/
+            toggleUserPanel($(this), salesViewPanel, shopViewBtn, shopViewPanel, orderViewBtn, orderViewPanel);
+            $(userPanelHead).html('Ваши продажи:');
         })
         $('#imageItemSave').change(function () {
             let image = $('#imageItemSave').prop('files')[0];
@@ -930,6 +950,15 @@
             }
         }
 
+        // получаем проданные товары по id магазина
+        async function getSoldItemsByShop(id) {
+            const response = await fetch(`/api/shop/${id}/soldItems`);
+            if (response.ok) {
+                const soldItems = await response.json();
+                return soldItems;
+            }
+        }
+
         //получаем магазины по id пользователя
         async function getShops() {
             const response = await fetch("/api/userPage/shops");
@@ -1046,11 +1075,74 @@
             orderContentConteiner.html(insert_html);
         }
 
-        function toggleUserPanel(e1, e2, p1, p2) {
-            $(e1).addClass('active');
-            $(e2).removeClass('active');
-            $(p1).addClass('show');
-            $(p2).removeClass('show');
+        function countShopSales(soldItems) {
+            let sales = {};
+            for (let item of soldItems) {
+                let itemId = item.id;
+                if (!Object.keys(sales).includes(String(itemId))) {
+                    sales[itemId] = {'name': item.name, 'count': 1, 'soldSum': item.price, 'income': item.price - item.basePrice};
+                } else {
+                    sales[itemId].count += 1;
+                    sales[itemId].soldSum += item.price;
+                    sales[itemId].income += item.price - item.basePrice;
+                }
+            }
+            return sales;
+        }
+
+        function addReportOnShop(shop, soldItems) {
+            let report = {
+                'shopName': shop.name,
+                'sales': countShopSales(soldItems)
+            };
+            return report;
+        }
+
+        function addSalesReportOnPage(report) {
+            console.log(report);
+            let html = [salesContentContainer.html()];
+                html.push(`<h2>${report.shopName}</h2>`);
+                let table = `<table class="table">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">Товар</th>
+                                      <th scope="col">Кол-во проданного</th>
+                                      <th scope="col">Сумма проданного</th>
+                                      <th scope="col">Прибыль</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>`
+                for (let item of Object.keys(report.sales)) {
+                    table += `<tr>
+                                      <td>${report.sales[item].name}</td>
+                                      <td>${report.sales[item].count}</td>
+                                      <td>${report.sales[item].soldSum}</td>
+                                      <td>${report.sales[item].income}</td>
+                                    </tr>`
+                }
+                table += ` </tbody>
+                                </table>`;
+                html.push(table);
+                salesContentContainer.html(html.join(''));
+        }
+
+        function loadSalesReport(shops) {
+            salesContentContainer.html('');
+            for (let shop of shops) {
+                getSoldItemsByShop(shop.id)
+                    .then(soldItems => addReportOnShop(shop, soldItems))
+                    .then(report => addSalesReportOnPage(report));
+            }
+        }
+
+        // e1,
+        function toggleUserPanel(addActive, addShow, removeActive, removeShow, removeActive1, removeShow1) {
+            $(addActive).addClass('active');
+            $(removeActive).removeClass('active');
+            $(addShow).addClass('show');
+            $(removeShow).removeClass('show');
+            $(removeActive1).removeClass('active');
+            $(removeShow1).removeClass('show');
         }
     })
 </script>

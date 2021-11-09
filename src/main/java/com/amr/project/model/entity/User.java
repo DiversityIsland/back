@@ -21,13 +21,13 @@ import java.util.Collection;
 @Getter
 @Setter
 @Builder
-@ToString
+@ToString(of = {"id", "email", "username", "password", "phone", "firstName", "lastName", "age", "gender"})
+@EqualsAndHashCode(of = {"id", "email", "username"})
 public class User implements UserDetails {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
 
     @Column(unique = true)

@@ -23,6 +23,8 @@ public class ItemDto {
 
     private String name;
 
+    private BigDecimal basePrice;
+
     private BigDecimal price;
 
     private int count;

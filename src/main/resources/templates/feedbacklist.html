@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Список обращений</title>
+    <link href="/css/product_page_style.css" rel="stylesheet">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          rel="stylesheet">
+    <link crossorigin="anonymous" href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"/>
+    <script crossorigin="anonymous"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            th:src="@{'https://code.jquery.com/jquery-3.5.1.slim.min.js'}"></script>
+</head>
+<body>
+<div th:fragment="header">
+    <!--HEADER-->
+    <header class="bg-dark text-white" style="height: 44px;">
+        <div class="container" style="height: 44px;">
+            <div class="d-flex align-items-center justify-content-center justify-content-lg-start"
+                 style="height: 44px;">
+                <a href="/" class="d-flex align-items-center mb-lg-0 text-white text-decoration-none">
+                    <h5 style="margin: 0;">LOGO</h5>
+                </a>
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 ms-5">
+                    <li><a href="/shops" class="nav-link px-2 text-white"><font style="vertical-align: inherit;"><font
+                            style="vertical-align: inherit;">Магазины</font></font></a></li>
+                    <li><a href="#" class="nav-link px-2 text-white"><font style="vertical-align: inherit;"><font
+                            style="vertical-align: inherit;">Товары</font></font></a></li>
+                    <li><a href="/favorites" sec:authorize="isAuthenticated()" class="nav-link px-2 text-white" id="linkFavorites" ><font style="vertical-align: inherit;"><font
+                            style="vertical-align: inherit;">Избранное</font></font></a></li>
+                    <li><a href="#" class="nav-link px-2 text-white"><font style="vertical-align: inherit;"><font
+                            style="vertical-align: inherit;">Ещё...</font></font></a></li>
+                    <li><a  href="/moderator" sec:authorize="hasAnyAuthority('MODERATOR')" class="nav-link px-2 text-white">
+                        <font style="vertical-align: inherit;">Панель модератора</font></a></li>
+                    <li><a  href="/admin" sec:authorize="hasAnyAuthority('ADMIN')" class="nav-link px-2 text-white">
+                        <font style="vertical-align: inherit;">Панель администратора</font></a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+</div>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Дата</th>
+        <th scope="col">Причина обращения</th>
+        <th scope="col">Текст обращения</th>
+        <th scope="col">Отправитель обращения</th>
+        <th scope="col">Actions</th>
+        </tr>
+    </thead>
+
+    <tr th:each="feedback : ${feedback}">
+        <td><p th:text="${feedback.id}"></p></td>
+        <td><p th:text="${feedback.dateTime}"></p></td>
+        <td><p th:text="*{feedback.reason.toString()}"></p></td>
+        <td><p th:text="${feedback.full_text}"></p></td>
+        <td><p th:text="*{feedback.username}"></p></td>
+
+
+        <td sec:authorize="hasAnyAuthority('ADMIN')">
+            <a th:method="GET" th:href="|@{/feedback/{id}/(id=${feedback.id})}|" class="btn btn-danger delete-button">Delete</a>
+        </td>
+    </tr>
+
+</table>
+</body>
+
+</html>

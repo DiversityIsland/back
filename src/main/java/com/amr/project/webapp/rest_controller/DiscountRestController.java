@@ -42,15 +42,18 @@ public class DiscountRestController {
         this.shopService = shopService;
         this.discountMapper = discountMapper;
     }
+
     @GetMapping("/{shopId}")
     public ResponseEntity<DiscountDto> getDiscountByShopIdAndUserId(@PathVariable("shopId") Long shopId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<User> userOp = userService.findByUsername(authentication.getName());
+
         if(authentication.isAuthenticated() && userOp.isPresent()) {
             return ResponseEntity.ok(discountService.findByUserAndShop(userOp.get().getId(), shopId));
         }
         return ResponseEntity.notFound().build();
     }
+
     @GetMapping
     public ResponseEntity<List<DiscountDto>> getDiscounts(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

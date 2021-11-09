@@ -6,12 +6,14 @@ import com.amr.project.model.entity.Item;
 import com.amr.project.model.entity.Review;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.Collection;
 import java.util.List;
 
 @ApiModel
 @Data
+@ToString
 public class ShopDto {
     private Long id;
     private String name;
@@ -30,5 +32,5 @@ public class ShopDto {
     private boolean isModerateAccept;
     private String moderatedRejectReason;
     private boolean isPretendentToBeDeleted;
-    private String logoarray;
+    private String logoarray; // Должна быть картинка в массиве byte
 }

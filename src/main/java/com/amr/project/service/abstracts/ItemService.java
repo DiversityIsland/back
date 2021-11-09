@@ -15,6 +15,8 @@ public interface ItemService extends ReadWriteService<Item, Long> {
 
     List<Item> getItemsByShopId(Long id);
 
+    List<Item> getSoldItemsByShopId(Long id);
+
     List<Item> getUnmoderatedItems();
 
     List<Item> findModeratedShops();

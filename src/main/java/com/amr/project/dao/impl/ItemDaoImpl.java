@@ -3,6 +3,7 @@ package com.amr.project.dao.impl;
 
 import com.amr.project.dao.abstracts.ItemDao;
 import com.amr.project.model.entity.Item;
+import com.amr.project.model.enums.Status;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
@@ -37,6 +38,18 @@ public class ItemDaoImpl extends ReadWriteDAOImpl<Item, Long> implements ItemDao
 
 
         return query.getResultList();
+    }
+
+    @Override
+    public List<Item> getSoldItemsByShopId(Long id) {
+
+        String query = "SELECT * FROM item JOIN orders_item oi on item.id = oi.item_id " +
+                "JOIN orders o on oi.orders_id = o.id JOIN shop_item si on item.id = si.item_id " +
+                "JOIN shop s on si.shop_id = s.id WHERE o.status = :status AND s.id = :id";
+        return entityManager.createNativeQuery(query, Item.class)
+                .setParameter("id", id)
+                .setParameter("status", Status.COMPLETE.ordinal())
+                .getResultList();
     }
 
     @Override

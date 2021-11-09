@@ -2,6 +2,7 @@ package com.amr.project.service.impl;
 
 import com.amr.project.model.entity.*;
 import com.amr.project.model.enums.Gender;
+import com.amr.project.model.enums.Status;
 import com.amr.project.service.abstracts.*;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.*;
+import java.util.stream.IntStream;
 
 @Service
 @Transactional
@@ -50,6 +52,9 @@ public class TestDataEntityService {
     @Autowired
     private DiscountService discountService;
 
+    @Autowired
+    private OrderService orderService;
+
 
     public void createEntity() {
         createImageEntity();
@@ -62,6 +67,7 @@ public class TestDataEntityService {
         createItemEntity();
         createReviewEntity();
         createDiscountEntity();
+        createOrderEntity();
     }
 
     @SneakyThrows
@@ -543,6 +549,7 @@ public class TestDataEntityService {
 
         Item item = Item.builder()
                 .name("Маска медицинская")
+                .basePrice(BigDecimal.valueOf(10))
                 .price(BigDecimal.valueOf(30))
                 .categories(categories)
                 .images(images)
@@ -559,6 +566,7 @@ public class TestDataEntityService {
         images.add(imageService.getByKey(6L));
         Item item3 = Item.builder()
                 .name("Плащ Louis Vuitton")
+                .basePrice(BigDecimal.valueOf(15000))
                 .price(BigDecimal.valueOf(150000))
                 .categories(categories)
                 .images(images)
@@ -579,6 +587,7 @@ public class TestDataEntityService {
 
         Item item18 = Item.builder()
                 .name("Зонт 3 слона")
+                .basePrice(BigDecimal.valueOf(400))
                 .price(BigDecimal.valueOf(700))
                 .categories(categories)
                 .images(images)
@@ -595,6 +604,7 @@ public class TestDataEntityService {
         images.add(imageService.getByKey(8L));
         Item item19 = Item.builder()
                 .name("Очки RAY BAN")
+                .basePrice(BigDecimal.valueOf(8000))
                 .price(BigDecimal.valueOf(15000))
                 .categories(categories)
                 .images(images)
@@ -611,6 +621,7 @@ public class TestDataEntityService {
         images.add(imageService.getByKey(9L));
         Item item1 = Item.builder()
                 .name("Антисептик для рук")
+                .basePrice(BigDecimal.valueOf(45))
                 .price(BigDecimal.valueOf(150))
                 .categories(categories)
                 .images(images)
@@ -627,6 +638,7 @@ public class TestDataEntityService {
         images.add(imageService.getByKey(10L));
         Item item4 = Item.builder()
                 .name("Сумка Birkin")
+                .basePrice(BigDecimal.valueOf(10000))
                 .price(BigDecimal.valueOf(1250000))
                 .categories(categories)
                 .images(images)
@@ -647,6 +659,7 @@ public class TestDataEntityService {
 
         Item item2 = Item.builder()
                 .name("Ноутбук Lenovo")
+                .basePrice(BigDecimal.valueOf(30000))
                 .price(BigDecimal.valueOf(70000))
                 .categories(categories)
                 .images(images)
@@ -667,6 +680,7 @@ public class TestDataEntityService {
         images.add(imageService.getByKey(12L));
         Item item5 = Item.builder()
                 .name("Диван ФРИХЕТЭН")
+                .basePrice(BigDecimal.valueOf(16000))
                 .price(BigDecimal.valueOf(24999))
                 .categories(categories)
                 .images(images)
@@ -683,6 +697,7 @@ public class TestDataEntityService {
         images.add(imageService.getByKey(13L));
         Item item6 = Item.builder()
                 .name("Кресло Ведбу")
+                .basePrice(BigDecimal.valueOf(10000))
                 .price(BigDecimal.valueOf(16999))
                 .categories(categories)
                 .images(images)
@@ -703,6 +718,7 @@ public class TestDataEntityService {
 
         Item item7 = Item.builder()
                 .name("Мягкая игрушка")
+                .basePrice(BigDecimal.valueOf(700))
                 .price(BigDecimal.valueOf(1000))
                 .categories(categories)
                 .images(images)
@@ -720,6 +736,7 @@ public class TestDataEntityService {
         images.add(imageService.getByKey(15L));
         Item item8 = Item.builder()
                 .name("Мобиль")
+                .basePrice(BigDecimal.valueOf(400))
                 .price(BigDecimal.valueOf(649))
                 .categories(categories)
                 .images(images)
@@ -740,6 +757,7 @@ public class TestDataEntityService {
 
         Item item9 = Item.builder()
                 .name("Стиральная машина Bosch")
+                .basePrice(BigDecimal.valueOf(80000))
                 .price(BigDecimal.valueOf(200000))
                 .categories(categories)
                 .images(images)
@@ -756,6 +774,7 @@ public class TestDataEntityService {
         images.add(imageService.getByKey(17L));
         Item item10 = Item.builder()
                 .name("Кофемашина Philips")
+                .basePrice(BigDecimal.valueOf(40000))
                 .price(BigDecimal.valueOf(84999))
                 .categories(categories)
                 .images(images)
@@ -772,6 +791,7 @@ public class TestDataEntityService {
         images.add(imageService.getByKey(18L));
         Item item11 = Item.builder()
                 .name("Блендер Braun")
+                .basePrice(BigDecimal.valueOf(1000))
                 .price(BigDecimal.valueOf(3700))
                 .categories(categories)
                 .images(images)
@@ -792,6 +812,7 @@ public class TestDataEntityService {
 
         Item item12 = Item.builder()
                 .name("Телефон Nokia")
+                .basePrice(BigDecimal.valueOf(5000))
                 .price(BigDecimal.valueOf(10999))
                 .categories(categories)
                 .images(images)
@@ -809,6 +830,7 @@ public class TestDataEntityService {
 
         Item item13 = Item.builder()
                 .name("Телефон Samsung")
+                .basePrice(BigDecimal.valueOf(70000))
                 .price(BigDecimal.valueOf(118990))
                 .categories(categories)
                 .images(images)
@@ -828,6 +850,7 @@ public class TestDataEntityService {
         images.add(imageService.getByKey(21L));
         Item item14 = Item.builder()
                 .name("Автомобиль Kia Ceed")
+                .basePrice(BigDecimal.valueOf(600000))
                 .price(BigDecimal.valueOf(1599999))
                 .categories(categories)
                 .images(images)
@@ -845,6 +868,7 @@ public class TestDataEntityService {
 
         Item item15 = Item.builder()
                 .name("Автомобиль Hundai Solaris")
+                .basePrice(BigDecimal.valueOf(800000))
                 .price(BigDecimal.valueOf(1250000))
                 .categories(categories)
                 .images(images)
@@ -865,6 +889,7 @@ public class TestDataEntityService {
 
         Item item16 = Item.builder()
                 .name("Ботинки Timberland")
+                .basePrice(BigDecimal.valueOf(4000))
                 .price(BigDecimal.valueOf(10000))
                 .categories(categories)
                 .images(images)
@@ -881,6 +906,7 @@ public class TestDataEntityService {
         images.add(imageService.getByKey(24L));
         Item item17 = Item.builder()
                 .name("Ботинки Dr.Martens")
+                .basePrice(BigDecimal.valueOf(8000))
                 .price(BigDecimal.valueOf(15999))
                 .categories(categories)
                 .images(images)
@@ -894,5 +920,99 @@ public class TestDataEntityService {
         itemService.persist(item17);
     }
 
+    private void createOrderEntity() {
+        User user1 = userService.getByKey(2L);
+        User user2 = userService.getByKey(3L);
+        User user3 = userService.getByKey(4L);
+
+        List<Item> allItems = new ArrayList<>(itemService.getAll());
+        allItems.removeAll(itemService.getUnmoderatedItems());
+
+        Set<Item> itemSet1 = new HashSet<>(allItems.subList(0, 3));
+        Set<Item> itemSet2 = new HashSet<>(allItems.subList(2, 5));
+        Set<Item> itemSet3 = new HashSet<>(allItems.subList(1, 8));
+        Set<Item> itemSet4 = new HashSet<>(allItems.subList(3, 12));
+        Set<Item> itemSet5 = new HashSet<>(allItems.subList(0, 11));
+        Set<Item> itemSet6 = new HashSet<>(allItems.subList(7, 10));
+
+        Order order1 = Order.builder()
+                .items(itemSet1)
+                .date(Calendar.getInstance())
+                .status(Status.COMPLETE)
+                .address(addressService.getByKey(1L))
+                .total(BigDecimal.valueOf(itemSet1.stream()
+                        .mapToInt(item -> item.getPrice().intValue()).sum()))
+                .user(user1)
+                .buyerName(user1.getFirstName())
+                .buyerPhone(user1.getPhone())
+                .build();
+        orderService.persist(order1);
+
+        Order order2 = Order.builder()
+                .items(itemSet2)
+                .date(Calendar.getInstance())
+                .status(Status.COMPLETE)
+                .address(addressService.getByKey(1L))
+                .total(BigDecimal.valueOf(itemSet2.stream()
+                        .mapToInt(item -> item.getPrice().intValue()).sum()))
+                .user(user2)
+                .buyerName(user2.getFirstName())
+                .buyerPhone(user2.getPhone())
+                .build();
+        orderService.persist(order2);
+
+        Order order3 = Order.builder()
+                .items(itemSet3)
+                .date(Calendar.getInstance())
+                .status(Status.COMPLETE)
+                .address(addressService.getByKey(1L))
+                .total(BigDecimal.valueOf(itemSet3.stream()
+                        .mapToInt(item -> item.getPrice().intValue()).sum()))
+                .user(user3)
+                .buyerName(user3.getFirstName())
+                .buyerPhone(user3.getPhone())
+                .build();
+        orderService.persist(order3);
+
+        Order order4 = Order.builder()
+                .items(itemSet4)
+                .date(Calendar.getInstance())
+                .status(Status.START)
+                .address(addressService.getByKey(1L))
+                .total(BigDecimal.valueOf(itemSet4.stream()
+                        .mapToInt(item -> item.getPrice().intValue()).sum()))
+                .user(user1)
+                .buyerName(user1.getFirstName())
+                .buyerPhone(user1.getPhone())
+                .build();
+        orderService.persist(order4);
+
+        Order order5 = Order.builder()
+                .items(itemSet5)
+                .date(Calendar.getInstance())
+                .status(Status.COMPLETE)
+                .address(addressService.getByKey(1L))
+                .total(BigDecimal.valueOf(itemSet5.stream()
+                        .mapToInt(item -> item.getPrice().intValue()).sum()))
+                .user(user2)
+                .buyerName(user2.getFirstName())
+                .buyerPhone(user2.getPhone())
+                .build();
+        orderService.persist(order5);
+
+        Order order6 = Order.builder()
+                .items(itemSet6)
+                .date(Calendar.getInstance())
+                .status(Status.COMPLETE)
+                .address(addressService.getByKey(1L))
+                .total(BigDecimal.valueOf(itemSet6.stream()
+                        .mapToInt(item -> item.getPrice().intValue()).sum()))
+                .user(user3)
+                .buyerName(user3.getFirstName())
+                .buyerPhone(user3.getPhone())
+                .build();
+        orderService.persist(order6);
+
+    }
 
 }

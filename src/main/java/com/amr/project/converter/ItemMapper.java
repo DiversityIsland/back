@@ -20,16 +20,11 @@ import java.util.List;
         ReferenceImageMapper.class, ReferenceReviewMapper.class, ReviewMapper.class},
         componentModel = "spring")
 public interface ItemMapper {
-    ItemMapper INSTANCE = Mappers.getMapper(ItemMapper.class);
 
-    @Mappings({
-            @Mapping(source = "shop.id", target = "shopId"),
-    })
+    @Mappings({@Mapping(source = "shop.id", target = "shopId")})
     ItemDto itemToItemDto(Item item);
 
-    @Mappings({
-            @Mapping(source = "shopId", target = "shop.id"),
-    })
+    @Mappings({@Mapping(source = "shopId", target = "shop.id")})
     Item itemDtoToItem(ItemDto itemDto);
 
     default List<Item> map(Shop shop) {

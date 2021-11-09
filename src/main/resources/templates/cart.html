@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -9,6 +10,7 @@
   <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
 </head>
 <body>
+
 <div class="container">
   <h1>Ваша корзина товаров:</h1>
   <br>
@@ -21,10 +23,17 @@
       <h2>
         <div id="itemSubtotal"></div>
       </h2>
-      <div>
-        <a id="order_btn" class="btn btn-primary">Перейти к оформлению заказа</a>
+      <div sec:authorize="!isAuthenticated()">
+        <form style="margin-top: 10px">
+          <fieldset>
+            <a href="/login">Авторизуйтесь</a>, чтобы оформить заказ.
+          </fieldset>
+        </form>
       </div>
-      <div id="paymentButton">
+      <div>
+        <a href="/order/{id}" sec:authorize="isAuthenticated()" id="order_btn" class="btn btn-primary">Перейти к оформлению заказа</a>
+      </div>
+      <div id="paymentButton" sec:authorize="isAuthenticated()">
       </div>
       <div class="form-group mt-2">
         <a href="/">
@@ -34,6 +43,9 @@
     </div>
   </div>
 </div>
+
+
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script type="text/javascript" th:src="@{js/cart.js}" src="../static/js/cart.js"></script>

@@ -40,10 +40,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/oauth2/**").permitAll()
                 .antMatchers("/").anonymous()
+                .antMatchers("/messenger").hasAuthority("USER")
                 .antMatchers("/admin").hasAuthority("ADMIN")
                 .antMatchers("/user").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers("/moderator").hasAnyAuthority("MODERATOR", "ADMIN")
                 .antMatchers("/messages").hasAnyAuthority("USER","MODERATOR","ADMIN")
+                .antMatchers("/feedback").hasAnyAuthority("USER","MODERATOR","ADMIN")
+                .antMatchers("/feedback/feedbacklist").hasAnyAuthority("MODERATOR", "ADMIN")
                 .and().formLogin().successHandler(successUserHandler)
                 .loginPage("/login").loginProcessingUrl("/login")
                 // Указываем параметры логина и пароля с формы логина

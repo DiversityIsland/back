@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.servlet.http.Cookie;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -31,6 +32,10 @@ public class CartItem {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @JsonIgnore
+    @Column(name = "anon_id")
+    private String anonID;
 
     private int quantity;
 

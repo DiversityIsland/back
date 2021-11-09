@@ -20,7 +20,7 @@ public class CartItemDto {
     private ItemDto item;
     private ShopDto shop;
     private UserDto user;
+    private String anonID;
     private int quantity;
     private BigDecimal getSubTotal;
-
 }

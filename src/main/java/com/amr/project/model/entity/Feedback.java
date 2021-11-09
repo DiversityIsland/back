@@ -1,9 +1,8 @@
 package com.amr.project.model.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
 
 @Entity
 public class Feedback {
@@ -13,15 +12,25 @@ public class Feedback {
     private Long id;
 
     private String reason;
+
     private String full_text;
+    private LocalDateTime dateTime;
+    private String username;
+
+
 
     public Feedback() {
     }
 
-    public Feedback(String reason, String full_text) {
+    public Feedback(Long id, String reason, String full_text, LocalDateTime dateTime, String username) {
+        this.id = id;
         this.reason = reason;
         this.full_text = full_text;
+        this.dateTime = dateTime;
+        this.username = username;
     }
+
+
 
     public Long getId() {
         return id;
@@ -45,5 +54,33 @@ public class Feedback {
 
     public void setFull_text(String full_text) {
         this.full_text = full_text;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = (LocalDateTime) LocalDateTime.now();;
+    }
+
+
+    public String getUsername() {
+        return  username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public String toString() {
+        return "Feedback{" +
+                "id=" + id +
+                ", reason='" + reason + '\'' +
+                ", full_text='" + full_text + '\'' +
+                ", dateTime=" + dateTime +
+                ", username='" + username + '\'' +
+                '}';
     }
 }

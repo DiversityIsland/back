@@ -20,6 +20,13 @@ public class CartItemDAOImpl extends ReadWriteDAOImpl<CartItem, Long> implements
     }
 
     @Override
+    public List<CartItem> findByAnon(String anonID) {
+        return entityManager.createQuery("SELECT c from CartItem c where c.anonID = :anonID", CartItem.class)
+                .setParameter("anonID", anonID).getResultList();
+    }
+
+
+    @Override
     public void deleteByUserAndItem(Long userId, Long itemId) {
         entityManager.createQuery("delete from CartItem c where c.user.id = :userid and c.item.id = :itemid")
                 .setParameter("userid", userId)
@@ -46,4 +53,21 @@ public class CartItemDAOImpl extends ReadWriteDAOImpl<CartItem, Long> implements
                 .getResultStream().findAny();
     }
 
+    @Override
+    public Optional<CartItem> findByItemAndShopAndAnonID(Long itemId, Long shopId, String anonID) {
+        return entityManager.createQuery("select c from CartItem c where c.anonID = :anonID and c.item.id = :itemid " +
+                        "and c.shop.id= :shopid", CartItem.class)
+                .setParameter("anonID", anonID)
+                .setParameter("itemid", itemId)
+                .setParameter("shopid", shopId)
+                .getResultStream().findAny();
+    }
+
+    @Override
+    public void updateUserToAnonCartItem(User user, String anonID) {
+        entityManager.createQuery("update CartItem c set c.user.id=:userID where c.anonID = :anonID")
+                .setParameter("userID", user.getId())
+                .setParameter("anonID", anonID)
+                .executeUpdate();
+    }
 }

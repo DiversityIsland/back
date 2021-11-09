@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -78,5 +79,26 @@ public class UserServiceImpl extends ReadWriteServiceImpl<User, Long> implements
         countryDao.update(country);
         addressDao.update(address);
         super.update(user);
+
+    }
+
+    @Override
+    public Long getLastPageNumBySearchName(String name, int pageSize) {
+        Long countTotalEl =  userDao.findCountTotalElementBySearchName(name);
+        if (countTotalEl == 0) return 1L;
+        if (countTotalEl % pageSize == 0) {
+            return countTotalEl / pageSize;
+        }
+        return  (countTotalEl / pageSize) + 1;
+    }
+
+    @Override
+    public List<User> findUserBySearchNameWithPagination(String name, int pageNum, int pageSize) {
+        return userDao.findUserBySearchNameWithPagination(name, pageNum, pageSize);
+    }
+
+    @Override
+    public List<User> findConnectUsersById(Long currentId) {
+        return userDao.findConnectUsersById(currentId);
     }
 }

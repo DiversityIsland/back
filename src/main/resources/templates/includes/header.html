@@ -28,21 +28,15 @@
                         style="vertical-align: inherit;">Избранное</font></font></a></li>
                   <li><a href="#" class="nav-link px-2 text-white"><font style="vertical-align: inherit;"><font
                         style="vertical-align: inherit;">Ещё...</font></font></a></li>
-                  <div sec:authorize="hasAuthority('ADMIN')">
-                     <form>
-                        <input type="button" class="btn btn-info" value="Панель Администратора" onClick='location.href="/admin"'>
-                     </form>
-                  </div>
-                  <div sec:authorize="hasAuthority('MODERATOR')">
-                     <form>
-                        <input type="button" class="btn btn-info" value="Панель Модератора" onClick='location.href="/moderator"'>
-                     </form>
-                  </div>
+                  <li><a  href="/moderator" sec:authorize="hasAnyAuthority('MODERATOR')" class="nav-link px-2 text-white">
+                     <font style="vertical-align: inherit;">Панель модератора</font></a></li>
+                  <li><a  href="/admin" sec:authorize="hasAnyAuthority('ADMIN')" class="nav-link px-2 text-white">
+                     <font style="vertical-align: inherit;">Панель администратора</font></a></li>
+                  <li><a  href="/messenger" sec:authorize="isAuthenticated()" class="nav-link px-2 text-white">
+                     <font style="vertical-align: inherit;">Messenger</font></a></li>
                </ul>
 
-<!--               <button  sec:authorize="hasRole('ROLE_ADMIN')"-->
-<!--                        type="button" class="btn btn-info" value="Панель Администратора" onClick='location.href="/admin"'>-->
-<!--               </button>-->
+
 
 
                <div class="text-end">
@@ -103,6 +97,9 @@
                </div>
             </div>
          </div>
+         <nav class="navbar fixed-bottom navbar-light bg-light">
+            <a class="navbar-brand" href="/feedback">Обратная связь</a>
+         </nav>
       </header>
    </div>
 

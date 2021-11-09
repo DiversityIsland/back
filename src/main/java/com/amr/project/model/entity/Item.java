@@ -15,7 +15,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @ApiIgnore
 @Builder
-@ToString
+@ToString(of = {"id", "name", "price"})
 public class Item {
 
     @Id
@@ -25,6 +25,9 @@ public class Item {
 
     @Column
     private String name;
+
+    @Column
+    private BigDecimal basePrice;
 
     @Column
     private BigDecimal price;
