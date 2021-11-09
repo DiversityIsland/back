@@ -23,11 +23,6 @@ public class MessageServiceImpl extends ReadWriteServiceImpl<Message, Long> impl
     }
 
     @Override
-    public List<Message> getAllMessages() {
-        return messageDao.getAllMessages();
-    }
-
-    @Override
     public List<Message> getAllMessagesByUserId(Long id) {
         return messageDao.getAllMessagesByUserId(id);
     }
@@ -42,6 +37,5 @@ public class MessageServiceImpl extends ReadWriteServiceImpl<Message, Long> impl
     public void addMessage(Message message) {
         messageDao.addMessage(message);
     }
-
 
 }

@@ -8,11 +8,6 @@ import java.util.List;
 
 @Repository
 public class MessageDaoImpl extends ReadWriteDAOImpl<Message, Long> implements MessageDao {
-    @Override
-    public List<Message> getAllMessages() {
-        return entityManager.createQuery("SELECT m FROM Message m", Message.class)
-                .getResultList();
-    }
 
     public List<Message> getAllMessagesByUserId(Long id) {
         return entityManager.createQuery("SELECT m FROM Message m WHERE m.from.id = :id", Message.class)
