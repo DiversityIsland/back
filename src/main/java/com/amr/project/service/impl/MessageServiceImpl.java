@@ -19,8 +19,12 @@ public class MessageServiceImpl extends ReadWriteServiceImpl<Message, Long> impl
     private final MessageDao messageDao;
 
     @Autowired
-    public MessageServiceImpl(MessageDao messageDao) {
-        super(messageDao);
+//    public MessageServiceImpl(MessageDao messageDao) {
+//        super(messageDao);
+//        this.messageDao = messageDao;
+//    }
+    public MessageServiceImpl(ReadWriteDAO<Message, Long> readWriteDAO, MessageDao messageDao) {
+        super(readWriteDAO);
         this.messageDao = messageDao;
     }
 
@@ -37,11 +41,6 @@ public class MessageServiceImpl extends ReadWriteServiceImpl<Message, Long> impl
     @Override
     public void addMessage(Message message) {
         messageDao.addMessage(message);
-    }
-
-    public MessageServiceImpl(ReadWriteDAO<Message, Long> readWriteDAO, MessageDao messageDao) {
-        super(readWriteDAO);
-        this.messageDao = messageDao;
     }
 
     @Override
