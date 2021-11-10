@@ -44,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin").hasAuthority("ADMIN")
                 .antMatchers("/user").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers("/moderator").hasAnyAuthority("MODERATOR", "ADMIN")
+                .antMatchers("/messages").hasAnyAuthority("USER","MODERATOR","ADMIN")
                 .antMatchers("/feedback").hasAnyAuthority("USER","MODERATOR","ADMIN")
                 .antMatchers("/feedback/feedbacklist").hasAnyAuthority("MODERATOR", "ADMIN")
                 .and().formLogin().successHandler(successUserHandler)

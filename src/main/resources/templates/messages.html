@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Сообщения</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+          crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+
+    <!-- Не переносите подтягивание jQuery вниз файла, иначе он не сможет его прочитать в header-е, который встраивается
+        в начало этой странице -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+
+<!--HEADER /includes/header.html-->
+<div th:replace="/includes/header :: header"></div>
+
+<div class="container mt-4">
+    <h1>Сообщения</h1>
+
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-link active" id="income_messages_btn" data-bs-toggle="tab" href="#1" role="tab"
+           aria-controls="nav-home" aria-selected="true">Входящие</a>
+        <a class="nav-link" id="outgoing_messages_btn" data-bs-toggle="tab" href="#2" role="tab"
+           aria-controls="nav-profile" aria-selected="false">Отправленные</a>
+    </div>
+
+    <div class="row">
+
+        <!--входящие сообщения-->
+        <div id="income_messages_tab" class="col-16 collapse show">
+            <div class="container mt-4">
+                <h4>Входящие</h4>
+                <table class="table table-striped mt-3 mw4">
+                    <thead thead class="thead-dark">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">От</th>
+                        <th scope="col">Кому</th>
+                        <th scope="col">Сообщение</th>
+                    </tr>
+                    </thead>
+                    <tr th:each="message : ${messagesIn}">
+                        <td><p th:text="${message.id}"></p></td>
+                        <td><p th:text="${message.from.getUsername()}"></p></td>
+                        <td><p th:text="${message.to.getUsername()}"></p></td>
+                        <td><p th:text="${message.textMessage}"></p></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!--исходящие сообщения-->
+        <div id="outgoing_messages_tab" class="col-16 collapse">
+
+            <div class="container mt-4">
+                <h4>Отправленные</h4>
+                <table class="table table-striped mt-3 mw4">
+                    <thead thead class="thead-dark">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Кому</th>
+                        <th scope="col">От</th>
+                        <th scope="col">Сообщение</th>
+                    </tr>
+                    </thead>
+                    <tr th:each="message : ${messages}">
+                        <td><p th:text="${message.id}"></p></td>
+                        <td><p th:text="${message.to.getUsername()}"></p></td>
+                        <td><p th:text="${message.from.getUsername()}"></p></td>
+                        <td><p th:text="${message.textMessage}"></p></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const incomeMessagesViewBtn = $('#income_messages_btn');
+    const outgoingMessagesBtn = $('#outgoing_messages_btn');
+    const incomeMessagesTab = $('#income_messages_tab');
+    const outgoingMessagesTab = $('#outgoing_messages_tab');
+
+    $(document).ready(function () {
+
+        $(incomeMessagesViewBtn).on('click', function (e) {
+            e.preventDefault();
+            /*переключаем классы для отображения вкладки входящих сообщений и скрытия вкладки отправленных*/
+            toggleMessagesPanel($(this), outgoingMessagesBtn, incomeMessagesTab, outgoingMessagesTab);
+
+        })
+        $(outgoingMessagesBtn).on('click', function (e) {
+            e.preventDefault();
+
+            /*переключаем классы для отображения вкладки отправленных сообщений и скрытия вкладки входящих*/
+            toggleMessagesPanel($(this), incomeMessagesViewBtn, outgoingMessagesTab, incomeMessagesTab);
+
+        })
+
+        function toggleMessagesPanel(e1, e2, p1, p2) {
+            $(e1).addClass('active');
+            $(e2).removeClass('active');
+            $(p1).addClass('show');
+            $(p2).removeClass('show');
+        }
+    })
+</script>
+
+</body>
+</html>
