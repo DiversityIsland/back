@@ -57,6 +57,6 @@ public class Order {
     private String buyerPhone;
 
     @Column
-    @Enumerated(EnumType.STRING)
+//    @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 }
