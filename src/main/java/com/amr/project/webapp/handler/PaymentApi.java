@@ -17,15 +17,19 @@ import java.util.UUID;
 
 @Component
 public class PaymentApi {
-    private final BillPaymentClient client = BillPaymentClientFactory.createDefault("payment.secretKey");
+//    String secretKey = "eyJ2ZXJzaW9uIjoicmVzdF92MyIsImRhdGEiOnsibWVyY2hhbnRfaWQiOjUyNjgxMiwiYXBpX3VzZXJfaWQiOjcxNjI2MTk3LCJzZWNyZXQiOiJmZjBiZmJiM2UxYzc0MjY3YjIyZDIzOGYzMDBkNDhlYjhiNTnONPININONPN090MTg5Z**********************";
+//    String secretKey = "eyJ2ZXJzaW9uIjoiUDJQIiwiZGF0YSI6eyJwYXlpbl9tZXJjaGFudF9zaXRlX3VpZCI6ImdlbTloeS0wMCIsInVzZXJfaWQiOiI3OTA0MzMwMjM4MiIsInNlY3JldCI6IjRiYTUyNTk1NTczNjAxNTY3MGVjOGVkNThiM2Q2MDhlZDMyZDIwMjE0ZDRhMzk0MTMzOGU1OTAwZTJhODQ5MDYifX0=";
+    String secretKey = "eyJ2ZXJzaW9uIjoiUDJQIiwiZGF0YSI6eyJwYXlpbl9tZXJjaGFudF9zaXRlX3VpZCI6ImdpcnMwMi0wMCIsInVzZXJfaWQiOiI3OTA0Mzg4MDY2NiIsInNlY3JldCI6ImE0ZTQyOGE5NzUzYTY3YTM0MTBmNzFjNTVjNjk2ODJlNTFjZjUzOGY3MmYyMmE4MWY3NGMyMzdiZDQwYmU2NTAifX0=";
+    private final BillPaymentClient client = BillPaymentClientFactory.createDefault(secretKey);
+//    private final BillPaymentClient client = BillPaymentClientFactory.createDefault("payment.secretKey");
 
     public String payUrl(Order order) {
         CreateBillInfo billInfo = new CreateBillInfo(
                 order.getId().toString(),
                 new MoneyAmount(order.getTotal(),
-                        Currency.getInstance("currency")
+                       Currency.getInstance("RUB")
                 ),
-                "oplata zakaza " + order.getDate(),
+                "oplata zakaza ", // + order.getDate(),
                 ZonedDateTime.now().plusDays(3),
                 new Customer(
                         order.getUser().getEmail(),
