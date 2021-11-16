@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping("/payment")
@@ -23,6 +24,7 @@ public class PaymentController {
     @GetMapping("/{id}")
     public String getPayment(@PathVariable Long id) {
         Order order = orderService.getByKey(id);
-        return "redirect: " + paymentApi.payUrl(order);
+//        return "redirect: " + paymentApi.payUrl(order);
+        return "redirect:"+ paymentApi.payUrl(order);
     }
 }
