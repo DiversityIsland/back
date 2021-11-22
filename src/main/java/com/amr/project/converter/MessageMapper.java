@@ -1,5 +1,12 @@
 package com.amr.project.converter;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+
+//@Mapper
+//public interface MessageMapper {
+//    MessageMapper INSTANCE = Mappers.getMapper(MessageMapper.class);
+//}
 import com.amr.project.model.dto.MessageDto;
 import com.amr.project.model.entity.Chat;
 import com.amr.project.model.entity.Message;
@@ -26,6 +33,8 @@ import java.util.List;
 
 @Mapper(uses = {User.class, Chat.class}, componentModel = "spring")
 public interface MessageMapper {
+
+   // MessageMapper INSTANCE = Mappers.getMapper(MessageMapper.class);
 
     @Mapping(source = "chat.id", target = "chat")
     @Mapping(source = "to.id", target = "to")
