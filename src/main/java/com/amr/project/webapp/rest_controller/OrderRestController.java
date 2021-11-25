@@ -3,6 +3,7 @@ package com.amr.project.webapp.rest_controller;
 import com.amr.project.converter.ItemMapper;
 import com.amr.project.converter.OrderMapper;
 import com.amr.project.model.dto.AddressDto;
+import com.amr.project.model.dto.CartItemDto;
 import com.amr.project.model.dto.ItemDto;
 import com.amr.project.model.dto.OrderDto;
 import com.amr.project.model.entity.Order;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/order")
@@ -51,12 +53,12 @@ public class OrderRestController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<OrderDto> saveOrder(@RequestBody List<ItemDto> items) {
+    public ResponseEntity<OrderDto> saveOrder(@RequestBody List<CartItemDto> items) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<User> userOp = userService.findByUsername(authentication.getName());
 
         if(authentication.isAuthenticated() && userOp.isPresent()) {
-            Order order = orderService.collectOrderByUserAndItems(items, userOp.get());
+            Order order = orderService.collectOrderByUserAndItems(items.stream().map(CartItemDto::getItem).collect(Collectors.toList()), userOp.get());
             LOGGER.info("Пользователь создал заказ с id = " + order.getId().toString());
             return new ResponseEntity<>(orderMapper.orderToDto(order),
                     HttpStatus.OK);
