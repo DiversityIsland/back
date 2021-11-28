@@ -21,10 +21,10 @@ public class PaymentController {
         this.paymentApi = paymentApi;
         this.orderService = orderService;
     }
+
     @GetMapping("/{id}")
     public String getPayment(@PathVariable Long id) {
         Order order = orderService.getByKey(id);
-//        return "redirect: " + paymentApi.payUrl(order);
         return "redirect:"+ paymentApi.payUrl(order);
     }
 }

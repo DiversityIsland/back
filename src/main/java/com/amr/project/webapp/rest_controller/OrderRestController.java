@@ -8,6 +8,7 @@ import com.amr.project.model.dto.ItemDto;
 import com.amr.project.model.dto.OrderDto;
 import com.amr.project.model.entity.Order;
 import com.amr.project.model.entity.User;
+import com.amr.project.model.enums.Status;
 import com.amr.project.service.abstracts.OrderService;
 import com.amr.project.service.abstracts.UserService;
 import org.slf4j.Logger;
@@ -19,6 +20,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -59,6 +62,8 @@ public class OrderRestController {
 
         if(authentication.isAuthenticated() && userOp.isPresent()) {
             Order order = orderService.collectOrderByUserAndItems(items.stream().map(CartItemDto::getItem).collect(Collectors.toList()), userOp.get());
+//            order.setStatus(Status.START);
+//            order.setDate(new GregorianCalendar());
             LOGGER.info("Пользователь создал заказ с id = " + order.getId().toString());
             return new ResponseEntity<>(orderMapper.orderToDto(order),
                     HttpStatus.OK);

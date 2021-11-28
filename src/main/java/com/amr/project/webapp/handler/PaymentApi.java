@@ -1,6 +1,8 @@
 package com.amr.project.webapp.handler;
 
 import com.amr.project.model.entity.Order;
+import com.amr.project.model.enums.PaymentStatus;
+import com.amr.project.service.abstracts.OrderService;
 import com.qiwi.billpayments.sdk.client.BillPaymentClient;
 import com.qiwi.billpayments.sdk.client.BillPaymentClientFactory;
 import com.qiwi.billpayments.sdk.model.MoneyAmount;
@@ -17,6 +19,9 @@ import java.util.UUID;
 
 @Component
 public class PaymentApi {
+
+    private OrderService orderService;
+
 //    String secretKey = "eyJ2ZXJzaW9uIjoicmVzdF92MyIsImRhdGEiOnsibWVyY2hhbnRfaWQiOjUyNjgxMiwiYXBpX3VzZXJfaWQiOjcxNjI2MTk3LCJzZWNyZXQiOiJmZjBiZmJiM2UxYzc0MjY3YjIyZDIzOGYzMDBkNDhlYjhiNTnONPININONPN090MTg5Z**********************";
 //    String secretKey = "eyJ2ZXJzaW9uIjoiUDJQIiwiZGF0YSI6eyJwYXlpbl9tZXJjaGFudF9zaXRlX3VpZCI6ImdlbTloeS0wMCIsInVzZXJfaWQiOiI3OTA0MzMwMjM4MiIsInNlY3JldCI6IjRiYTUyNTk1NTczNjAxNTY3MGVjOGVkNThiM2Q2MDhlZDMyZDIwMjE0ZDRhMzk0MTMzOGU1OTAwZTJhODQ5MDYifX0=";
     String secretKey = "eyJ2ZXJzaW9uIjoiUDJQIiwiZGF0YSI6eyJwYXlpbl9tZXJjaGFudF9zaXRlX3VpZCI6ImdpcnMwMi0wMCIsInVzZXJfaWQiOiI3OTA0Mzg4MDY2NiIsInNlY3JldCI6ImE0ZTQyOGE5NzUzYTY3YTM0MTBmNzFjNTVjNjk2ODJlNTFjZjUzOGY3MmYyMmE4MWY3NGMyMzdiZDQwYmU2NTAifX0=";
@@ -54,8 +59,12 @@ public class PaymentApi {
     @Async
     public void getStatus(String orderId) {
         String status = client.getBillInfo(orderId).getStatus().getValue().toString();
-        // Когда будет готов OrderService здесь необходимо записать встатус "WAITING"(Ожидает оплаты)
-        while (!status.contains("PAID")) {
+        // Когда будет готов OrderService здесь необходимо записать в статус "WAITING"(Ожидает оплаты)
+        Order order = orderService.getByKey(Long.valueOf(orderId));
+        order.setPaymentStatus(PaymentStatus.WAITING);
+        orderService.update(order);
+
+        while (!status.contains("PAYED")) {
             try {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
@@ -64,5 +73,8 @@ public class PaymentApi {
             status = client.getBillInfo(orderId).getStatus().getValue().toString();
         }
         // А здесь записать в статус "PAID"(Оплачено)
+//        Order order = orderService.getByKey(Long.valueOf(orderId));
+        order.setPaymentStatus(PaymentStatus.PAYED);
+        orderService.update(order);
     }
 }

@@ -62,9 +62,13 @@
             },
             body: JSON.stringify(cartItems2)
         }).then((response) => {
-            response.status
+            response.json()
+                .then(function (data) {
+                    // let id = data.results.id;
+                    console.log('данные: ' + data.id);
+                    location.replace("/order/" + data.id)
+                })
         })
-        // location.replace("/order/{id}");
     }
 
 </script>
