@@ -47,6 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/moderator").hasAnyAuthority("MODERATOR", "ADMIN")
                 .antMatchers("/feedback").hasAnyAuthority("USER","MODERATOR","ADMIN")
                 .antMatchers("/feedback/feedbacklist").hasAnyAuthority("MODERATOR", "ADMIN")
+                .antMatchers("/order").hasAnyAuthority("USER", "ADMIN")
                 .and().formLogin().successHandler(successUserHandler)
                 .loginPage("/login").loginProcessingUrl("/login")
                 // Указываем параметры логина и пароля с формы логина
