@@ -963,7 +963,7 @@ public class TestDataEntityService {
                 .user(user1)
                 .buyerName(user1.getFirstName())
                 .buyerPhone(user1.getPhone())
-                .paymentStatus(PaymentStatus.PAYED)
+                .paymentStatus(PaymentStatus.PAID)
                 .build();
         orderService.persist(order1);
 
@@ -991,7 +991,7 @@ public class TestDataEntityService {
                 .user(user3)
                 .buyerName(user3.getFirstName())
                 .buyerPhone(user3.getPhone())
-                .paymentStatus(PaymentStatus.PAYED)
+                .paymentStatus(PaymentStatus.PAID)
                 .build();
         orderService.persist(order3);
 
@@ -1005,7 +1005,7 @@ public class TestDataEntityService {
                 .user(user1)
                 .buyerName(user1.getFirstName())
                 .buyerPhone(user1.getPhone())
-                .paymentStatus(PaymentStatus.PAYED)
+                .paymentStatus(PaymentStatus.PAID)
                 .build();
         orderService.persist(order4);
 
@@ -1019,7 +1019,7 @@ public class TestDataEntityService {
                 .user(user2)
                 .buyerName(user2.getFirstName())
                 .buyerPhone(user2.getPhone())
-                .paymentStatus(PaymentStatus.PAYED)
+                .paymentStatus(PaymentStatus.PAID)
                 .build();
         orderService.persist(order5);
 

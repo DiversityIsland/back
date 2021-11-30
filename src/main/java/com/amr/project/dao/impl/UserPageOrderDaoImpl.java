@@ -14,5 +14,7 @@ public class UserPageOrderDaoImpl extends ReadWriteDAOImpl<Order, Long> implemen
         return entityManager.createQuery("select o from Order o where o.user.id = :userId")
                 .setParameter("userId", userId)
                 .getResultList();
+
+
     }
 }
