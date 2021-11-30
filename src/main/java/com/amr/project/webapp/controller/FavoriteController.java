@@ -1,5 +1,7 @@
 package com.amr.project.webapp.controller;
 
+import com.amr.project.model.dto.FavoriteDto;
+import com.amr.project.model.entity.Favorite;
 import com.amr.project.model.entity.User;
 import com.amr.project.service.abstracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Optional;
 
@@ -32,4 +36,18 @@ public class FavoriteController {
         }
         return "favorites";
     }
+
+
+    /*
+    * список любимых товаров пользователя
+    * запрашивать по юзернейму небезопасно, могут сбрутить базу юзернеймов
+    * */
+    @PostMapping("/favorites")
+    public FavoriteDto getProfilePost(@RequestBody String userName) {
+        //todo: контроль входного параметра userName. Вдруг там строка с хакерским кодом
+        Optional<User> user = userService.findByUsername(userName);
+        Favorite fav = user.map(User::getFavorite).orElse(new Favorite());
+        return new FavoriteDto(fav);
+    }
+
 }
