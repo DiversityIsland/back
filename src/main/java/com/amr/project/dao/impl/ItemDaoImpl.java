@@ -48,7 +48,7 @@ public class ItemDaoImpl extends ReadWriteDAOImpl<Item, Long> implements ItemDao
                 "JOIN shop s on si.shop_id = s.id WHERE o.status = :status AND s.id = :id";
         return entityManager.createNativeQuery(query, Item.class)
                 .setParameter("id", id)
-                .setParameter("status", Status.COMPLETE.ordinal())
+                .setParameter("status", Status.PAID.ordinal())
                 .getResultList();
     }
 

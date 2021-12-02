@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.*;
-import java.util.stream.IntStream;
 
 @Service
 @Transactional
@@ -938,7 +937,7 @@ public class TestDataEntityService {
         Order order1 = Order.builder()
                 .items(itemSet1)
                 .date(Calendar.getInstance())
-                .status(Status.COMPLETE)
+                .status(Status.PAID)
                 .address(addressService.getByKey(1L))
                 .total(BigDecimal.valueOf(itemSet1.stream()
                         .mapToInt(item -> item.getPrice().intValue()).sum()))
@@ -951,7 +950,7 @@ public class TestDataEntityService {
         Order order2 = Order.builder()
                 .items(itemSet2)
                 .date(Calendar.getInstance())
-                .status(Status.COMPLETE)
+                .status(Status.PAID)
                 .address(addressService.getByKey(1L))
                 .total(BigDecimal.valueOf(itemSet2.stream()
                         .mapToInt(item -> item.getPrice().intValue()).sum()))
@@ -964,7 +963,7 @@ public class TestDataEntityService {
         Order order3 = Order.builder()
                 .items(itemSet3)
                 .date(Calendar.getInstance())
-                .status(Status.COMPLETE)
+                .status(Status.PAID)
                 .address(addressService.getByKey(1L))
                 .total(BigDecimal.valueOf(itemSet3.stream()
                         .mapToInt(item -> item.getPrice().intValue()).sum()))
@@ -977,7 +976,7 @@ public class TestDataEntityService {
         Order order4 = Order.builder()
                 .items(itemSet4)
                 .date(Calendar.getInstance())
-                .status(Status.START)
+                .status(Status.REGISTRED)
                 .address(addressService.getByKey(1L))
                 .total(BigDecimal.valueOf(itemSet4.stream()
                         .mapToInt(item -> item.getPrice().intValue()).sum()))
@@ -990,7 +989,7 @@ public class TestDataEntityService {
         Order order5 = Order.builder()
                 .items(itemSet5)
                 .date(Calendar.getInstance())
-                .status(Status.COMPLETE)
+                .status(Status.PAID)
                 .address(addressService.getByKey(1L))
                 .total(BigDecimal.valueOf(itemSet5.stream()
                         .mapToInt(item -> item.getPrice().intValue()).sum()))
@@ -1003,7 +1002,7 @@ public class TestDataEntityService {
         Order order6 = Order.builder()
                 .items(itemSet6)
                 .date(Calendar.getInstance())
-                .status(Status.COMPLETE)
+                .status(Status.PAID)
                 .address(addressService.getByKey(1L))
                 .total(BigDecimal.valueOf(itemSet6.stream()
                         .mapToInt(item -> item.getPrice().intValue()).sum()))

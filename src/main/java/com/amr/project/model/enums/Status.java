@@ -1,8 +1,14 @@
 package com.amr.project.model.enums;
 
 public enum Status {
-    START,
-    COMPLETE,
+    REGISTRED,
+    PAID,
     SENT,
-    DELIVERED
+    DONE
+
+
+    // оформлен
+    // оплачен
+    // передан в доставку
+    // доставлен
 }
