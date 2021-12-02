@@ -16,7 +16,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
+@ToString(of = {"id", "email", "username", "password", "phone", "firstName", "lastName", "age", "gender"})
 public class UserDto {
 
     private Long id;
@@ -48,7 +48,7 @@ public class UserDto {
     @JsonFormat(pattern="yyyy-MM-dd")
     private Calendar birthday;
 
-    //private Image images;
+    private ImageDto images;
     private String logo;
     private String logoarray;
 

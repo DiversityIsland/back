@@ -7,6 +7,7 @@ import com.amr.project.model.entity.Item;
 import com.amr.project.model.entity.Review;
 import com.amr.project.service.abstracts.ImageService;
 import com.amr.project.service.abstracts.ItemService;
+import com.amr.project.service.abstracts.MainPageItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-
 
 @RestController
 @RequestMapping("/api/item")
@@ -24,12 +25,23 @@ public class ItemRestController {
     private final ItemService itemService;
     private final ItemMapper itemMapper;
     private final ImageService imageService;
+    private final MainPageItemService mainPageItemService;
 
     @Autowired
-    public ItemRestController(ItemService itemService, ItemMapper itemMapper, ImageService imageService) {
+    public ItemRestController(ItemService itemService, ItemMapper itemMapper, ImageService imageService,
+                              MainPageItemService mainPageItemService) {
         this.itemService = itemService;
         this.itemMapper = itemMapper;
         this.imageService = imageService;
+        this.mainPageItemService = mainPageItemService;
+    }
+
+    /*
+    * json список популярных товаров нашего магазина
+    * */
+    @GetMapping("/popular")
+    public ResponseEntity<List<ItemDto>> getItem() {
+        return new ResponseEntity<>(mainPageItemService.findPopularItems(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

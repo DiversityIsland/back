@@ -2,12 +2,9 @@ package com.amr.project.webapp.rest_controller;
 
 import com.amr.project.converter.AddressMapper;
 import com.amr.project.converter.UserMapper;
-import com.amr.project.model.dto.AddressDto;
 import com.amr.project.model.dto.OrderDto;
 import com.amr.project.model.dto.ShopDto;
 import com.amr.project.model.dto.UserDto;
-import com.amr.project.model.entity.Image;
-import com.amr.project.model.entity.Shop;
 import com.amr.project.model.entity.User;
 import com.amr.project.service.abstracts.ItemService;
 import com.amr.project.service.abstracts.UserPageOrderService;
@@ -114,7 +111,7 @@ public class UserPageRestController {
 
     @PutMapping("/deleteShop/{id}")
     public ResponseEntity<?> makeShopPretendentToBeDeletedById(@PathVariable Long id) {
-        userPageShopService.maikShopPretendentToBeDeletedById(id);
+        userPageShopService.makeShopPretendentToBeDeletedById(id);
         return ResponseEntity.noContent().build();
     }
     @PutMapping("/deleteItem/{id}")

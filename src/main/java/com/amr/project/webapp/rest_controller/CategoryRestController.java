@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/category")
@@ -19,6 +21,15 @@ public class CategoryRestController {
     @Autowired
     public CategoryRestController(CategoryService categoryService) {
         this.categoryService = categoryService;
+    }
+
+
+    /*
+    * список категорий бокового меню
+    * */
+    @GetMapping("")
+    public ResponseEntity<List<CategoryDto>> getCategory() {
+        return new ResponseEntity<>(categoryService.getCategoryDto(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

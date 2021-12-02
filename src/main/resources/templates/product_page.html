@@ -15,6 +15,7 @@
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
             th:src="@{'https://code.jquery.com/jquery-3.5.1.slim.min.js'}"></script>
 </head>
+
 <body>
 <!--HEADER-->
 <div th:replace="/includes/header :: header"></div>
@@ -72,49 +73,74 @@
                 <div>
                     <label for="itemQuant">Количество:</label>
                     <input class="form-control" id="itemQuant" min="1"
-                           th:value="${cartItem!=null} ? ${cartItem.getQuantity()} : 1" type="number">
+                           th:value="${cartItem!=null}?${cartItem.getQuantity()} :1" type="number">
                 </div>
 
-                <!-- Кнопка "Добавить в избранное" показываем авторизованным пользователям-->
-                <div>
-                    <div class="form-group">
-                        <button sec:authorize="isAuthenticated()" class="btn btn-info btn-block"
-                                th:attr="onclick=|addItemToFavorites('${item.id}')|"
-                                style="margin-top: 10px">
+                <!-- Кнопки в избранное, добавить в корзину, перейти в корзину показываем авторизованным пользователям-->
+                <div sec:authorize="isAuthenticated()">
+                    <div class="form-group mt-2">
+                        <button class="btn btn-info btn-block" th:attr="onclick=|addItemToFavorites('${item.id}')|">
                             Добавить в избранное
                         </button>
                     </div>
-
-                    <!-- Кнопки "Добавить в корзину", "перейти в корзину" показываем неавторизованным пользователям-->
-                    <div class="form-group">
+                    <div class="form-group mt-2">
                         <button class="btn btn-primary btn-block"
-                                th:attr="onclick=|addCartItem('${item.id}','${shop.id}')|"
-                                style="margin-top: 10px">
-                            Добавить в корзину
+                                th:attr="onclick=|addCartItem('${item.id}','${shop.id}')|">Добавить в корзину
                         </button>
                     </div>
-
-                    <div class="form-group">
+                    <div class="form-group mt-2">
                         <a th:href="@{/cart}">
-                            <button class="btn btn-primary btn-block" id="toCart"
-                                    style="margin-top: 10px">
-                                Перейти в корзину
-                            </button>
+                            <button class="btn btn-primary btn-block" id="toCart">Перейти в корзину</button>
                         </a>
                     </div>
                 </div>
                 <!--        -------------------------------------------------------------------------------------->
-                <div class="form-group">
+                <div class="form-group mt-2">
                     <a th:href="@{/}">
-                        <button class="btn btn-secondary btn-block" id="toHome"
-                                style="margin-top: 10px">На главную страницу
-                        </button>
+                        <button class="btn btn-secondary btn-block" id="toHome">На главную страницу</button>
                     </a>
                 </div>
+                <div sec:authorize="isAuthenticated()">
+                    <div class="form-group mt-2 mb-2">
+                        <button class="btn btn-warning" id="messageBtn">Написать продавцу</button>
+                    </div>
+                </div>
+
+                <!--Modal-->
+                <div class="modal fade" id="messageModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-md" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="messageModalLabel">Your message</h4>
+                                <button class="btn btn-group" id="closeBtn" data-dismiss="modal">x</button>
+                            </div>
+                            <div class="modal-body">
+                                <form th:method="POST" th:action="@{/messages}" th:object="${newMessage}">
+                                    <br>
+                                    <div class="form-group">
+                                        <textarea rows="4" name="textMessage" th:id="textMessage"
+                                                  placeholder="Your message">
+                                        </textarea>
+                                        <br>
+                                        <br>
+                                        <div class="form-group">
+                                            <button class="btn btn-warning btn-block"
+                                                    th:name="itemId"
+                                                    th:value="${item.id}">Отправить
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div sec:authorize="!isAuthenticated()">
-                    <form style="margin-top: 10px">
+                    <form>
                         <fieldset>
-                            <a href="/login">Авторизуйтесь</a>, чтобы оставить отзыв.
+                            <a href="/login">Авторизуйтесь</a>, чтобы добавить товар в корзину или оставить отзыв
                         </fieldset>
                     </form>
                 </div>
@@ -123,6 +149,7 @@
     </div>
     <div id="favItem" th:data-itemId="${item.getId()}"></div>
 </div>
+<br>
 <br>
 <!--Вывод всех отзывов о товаре -->
 <div th:each="review : ${reviews}">
@@ -193,7 +220,6 @@
     async function addCartItem(itemId, shopId) {
         let quant = document.getElementById("itemQuant").value;
         let url = new URL("http://localhost:8888/api/cart/add")
-
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -211,13 +237,26 @@
             })
         })
     }
-</script>
 
+    $('#messageBtn').on('click', function (e) {
+        e.preventDefault();
+        $('#messageModal').modal('show');
+    })
+    $('#closeBtn').on('click', function (e) {
+        e.preventDefault();
+        $('#messageModal').modal('hide');
+    })
+
+
+
+
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
 <script type="text/javascript" th:src="@{/js/favorites.js}" src="../static/js/favorites.js"></script>
 
+</div>
 
 </body>
 </html>

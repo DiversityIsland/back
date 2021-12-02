@@ -20,21 +20,24 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Principal;
+
 @Controller
 public class ItemController {
 
-    private ItemService itemService;
-    private CartItemService cartItemService;
-    private UserService userService;
-    private ItemMapper itemMapper;
-    private CartItemMapper cartItemMapper;
-    private ShopMapper shopMapper;
-    private DiscountService discountService;
+    private final ItemService itemService;
+    private final CartItemService cartItemService;
+    private final UserService userService;
+    private final ItemMapper itemMapper;
+    private final CartItemMapper cartItemMapper;
+    private final ShopMapper shopMapper;
+    private final DiscountService discountService;
     private final ReviewService reviewService;
 
     @Autowired
     public ItemController(ItemService itemService, CartItemService cartItemService, UserService userService,
-                          ItemMapper itemMapper, CartItemMapper cartItemMapper, ShopMapper shopMapper, DiscountService discountService, ReviewService reviewService) {
+                          ItemMapper itemMapper, CartItemMapper cartItemMapper, ShopMapper shopMapper,
+                          DiscountService discountService, ReviewService reviewService) {
         this.itemService = itemService;
         this.cartItemService = cartItemService;
         this.userService = userService;
@@ -70,7 +73,9 @@ public class ItemController {
     }
 
     @PostMapping("/product/{id}")
-    public String saveReview(@PathVariable("id") Long id, @ModelAttribute("newReview") Review review, @ModelAttribute("rating") int rating) {
+    public String saveReview(@PathVariable("id") Long id,
+                             @ModelAttribute("newReview") Review review,
+                             @ModelAttribute("rating") int rating) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByUsername(authentication.getName()).get();
         review.setRating(rating);

@@ -31,7 +31,7 @@ public class UserPageShopServiceImpl extends ReadWriteServiceImpl<Shop,Long> imp
     }
 
     @Override
-    public void maikShopPretendentToBeDeletedById(Long id) {
+    public void makeShopPretendentToBeDeletedById(Long id) {
         Shop shop = super.getByKey(id);
         shop.setPretendentToBeDeleted(true);
         super.update(shop);

@@ -1,10 +1,10 @@
 package com.amr.project.model.dto;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class MessageDto {
     private Long id;
     private Long chat;
