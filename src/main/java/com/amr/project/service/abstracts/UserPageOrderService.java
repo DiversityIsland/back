@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface UserPageOrderService extends ReadWriteService<Order, Long> {
     List<OrderDto> getOrdersByUserId(Long userId);
+
+    void checkQiwiPaymentStatus(Long userId);
 }

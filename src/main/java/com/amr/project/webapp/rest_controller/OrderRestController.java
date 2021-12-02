@@ -62,8 +62,7 @@ public class OrderRestController {
 
         if(authentication.isAuthenticated() && userOp.isPresent()) {
             Order order = orderService.collectOrderByUserAndItems(items.stream().map(CartItemDto::getItem).collect(Collectors.toList()), userOp.get());
-//            order.setStatus(Status.START);
-//            order.setDate(new GregorianCalendar());
+
             LOGGER.info("Пользователь создал заказ с id = " + order.getId().toString());
             return new ResponseEntity<>(orderMapper.orderToDto(order),
                     HttpStatus.OK);
