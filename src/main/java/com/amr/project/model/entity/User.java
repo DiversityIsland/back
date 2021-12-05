@@ -161,6 +161,12 @@ public class User implements UserDetails {
         this.username = username;
     }
 
+    public User(Long id, String username, Collection<Role> roles){
+        this.id = id;
+        this.username = username;
+        this.roles = roles;
+    }
+
     public int calculateAge() {
 
         Calendar today = Calendar.getInstance();
