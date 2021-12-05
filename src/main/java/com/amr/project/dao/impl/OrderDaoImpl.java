@@ -13,4 +13,6 @@ public class OrderDaoImpl extends ReadWriteDAOImpl<Order, Long> implements Order
                 .setParameter("itemId", itemId)
                 .executeUpdate();
     }
+
+
 }

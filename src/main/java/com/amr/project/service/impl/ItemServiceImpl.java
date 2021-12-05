@@ -40,8 +40,23 @@ public class ItemServiceImpl extends ReadWriteServiceImpl<Item, Long>
     }
 
     @Override
+    public List<Item> getRegistredItemsByShopId(Long id) {
+        return itemDao.getRegistredItemsByShopId(id);
+    }
+
+    @Override
     public List<Item> getSoldItemsByShopId(Long id) {
         return itemDao.getSoldItemsByShopId(id);
+    }
+
+    @Override
+    public List<Item> getSentItemsByShopId(Long id) {
+        return itemDao.getSentItemsByShopId(id);
+    }
+
+    @Override
+    public List<Item> getDoneItemsByShopId(Long id) {
+        return null;
     }
 
     @Override

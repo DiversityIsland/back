@@ -11,6 +11,11 @@ import java.util.List;
 
 @Repository
 public class ItemDaoImpl extends ReadWriteDAOImpl<Item, Long> implements ItemDao {
+
+    private final String QUERY = "SELECT * FROM item JOIN orders_item oi on item.id = oi.item_id " +
+            "JOIN orders o on oi.orders_id = o.id JOIN shop_item si on item.id = si.item_id " +
+            "JOIN shop s on si.shop_id = s.id WHERE o.status = :status AND s.id = :id";
+
     @Override
     public Item findItemById(Long id) {
         return entityManager.createQuery("SELECT i from Item i where i.id = :id", Item.class)
@@ -40,17 +45,46 @@ public class ItemDaoImpl extends ReadWriteDAOImpl<Item, Long> implements ItemDao
         return query.getResultList();
     }
 
+    //использоать что бы сменить статус на REGISTRED
+    @Override
+    public List<Item> getRegistredItemsByShopId(Long id) {
+
+        return entityManager.createNativeQuery(QUERY, Item.class)
+                .setParameter("id", id)
+                .setParameter("status", Status.REGISTRED.ordinal())
+                .getResultList();
+    }
+
+    //использоать что бы сменить статус на PAID
     @Override
     public List<Item> getSoldItemsByShopId(Long id) {
 
-        String query = "SELECT * FROM item JOIN orders_item oi on item.id = oi.item_id " +
-                "JOIN orders o on oi.orders_id = o.id JOIN shop_item si on item.id = si.item_id " +
-                "JOIN shop s on si.shop_id = s.id WHERE o.status = :status AND s.id = :id";
-        return entityManager.createNativeQuery(query, Item.class)
+
+        return entityManager.createNativeQuery(QUERY, Item.class)
                 .setParameter("id", id)
                 .setParameter("status", Status.PAID.ordinal())
                 .getResultList();
     }
+
+    //использоать что бы сменить статус на SENT
+    @Override
+    public List<Item> getSentItemsByShopId(Long id) {
+
+        return entityManager.createNativeQuery(QUERY, Item.class)
+                .setParameter("id", id)
+                .setParameter("status", Status.SENT.ordinal())
+                .getResultList();
+    }
+
+    //использоать что бы сменить статус на DONE
+    @Override
+    public List<Item> getDoneItemsByShopId(Long id) {
+        return entityManager.createNativeQuery(QUERY, Item.class)
+                .setParameter("id", id)
+                .setParameter("status", Status.DONE.ordinal())
+                .getResultList();
+    }
+
 
     @Override
     public List<Item> getUnmoderatedItems() {
