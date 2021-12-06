@@ -3,6 +3,7 @@ package com.amr.project.dao.impl;
 
 import com.amr.project.dao.abstracts.ItemDao;
 import com.amr.project.model.entity.Item;
+import com.amr.project.model.entity.Review;
 import com.amr.project.model.enums.Status;
 import org.springframework.stereotype.Repository;
 
@@ -12,9 +13,6 @@ import java.util.List;
 @Repository
 public class ItemDaoImpl extends ReadWriteDAOImpl<Item, Long> implements ItemDao {
 
-    private final String QUERY = "SELECT * FROM item JOIN orders_item oi on item.id = oi.item_id " +
-            "JOIN orders o on oi.orders_id = o.id JOIN shop_item si on item.id = si.item_id " +
-            "JOIN shop s on si.shop_id = s.id WHERE o.status = :status AND s.id = :id";
 
     @Override
     public Item findItemById(Long id) {
@@ -45,13 +43,20 @@ public class ItemDaoImpl extends ReadWriteDAOImpl<Item, Long> implements ItemDao
         return query.getResultList();
     }
 
-    //использоать что бы сменить статус на REGISTRED
-    @Override
-    public List<Item> getRegistredItemsByShopId(Long id) {
 
-        return entityManager.createNativeQuery(QUERY, Item.class)
+    @Override
+    public List<Item> setRegistredItemsByShopId(Long id) {
+        return entityManager.createQuery("update Order s set s.id =: id where s.status = : status", Item.class)
                 .setParameter("id", id)
                 .setParameter("status", Status.REGISTRED.ordinal())
+                .getResultList();
+    }
+
+    @Override
+    public List<Item> setPaidItemsByShopId(Long id) {
+        return entityManager.createQuery("update Order s set s.id =: id where s.status = : status", Item.class)
+                .setParameter("id", id)
+                .setParameter("status", Status.PAID.ordinal())
                 .getResultList();
     }
 
@@ -59,8 +64,13 @@ public class ItemDaoImpl extends ReadWriteDAOImpl<Item, Long> implements ItemDao
     @Override
     public List<Item> getSoldItemsByShopId(Long id) {
 
+        String query = "SELECT * FROM item JOIN orders_item oi on item.id = oi.item_id " +
+                "JOIN orders o on oi.orders_id = o.id JOIN shop_item si on item.id = si.item_id " +
+                "JOIN shop s on si.shop_id = s.id WHERE o.status = :status AND s.id = :id";
 
-        return entityManager.createNativeQuery(QUERY, Item.class)
+
+
+        return entityManager. createNativeQuery(query, Item.class)
                 .setParameter("id", id)
                 .setParameter("status", Status.PAID.ordinal())
                 .getResultList();
@@ -68,9 +78,9 @@ public class ItemDaoImpl extends ReadWriteDAOImpl<Item, Long> implements ItemDao
 
     //использоать что бы сменить статус на SENT
     @Override
-    public List<Item> getSentItemsByShopId(Long id) {
+    public List<Item> setSentItemsByShopId(Long id) {
 
-        return entityManager.createNativeQuery(QUERY, Item.class)
+        return entityManager.createQuery("update Order s set s.id =: id where s.status = : status", Item.class)
                 .setParameter("id", id)
                 .setParameter("status", Status.SENT.ordinal())
                 .getResultList();
@@ -78,8 +88,8 @@ public class ItemDaoImpl extends ReadWriteDAOImpl<Item, Long> implements ItemDao
 
     //использоать что бы сменить статус на DONE
     @Override
-    public List<Item> getDoneItemsByShopId(Long id) {
-        return entityManager.createNativeQuery(QUERY, Item.class)
+    public List<Item> setDoneItemsByShopId(Long id) {
+        return entityManager.createQuery("update Order s set s.id =: id where s.status = : status", Item.class)
                 .setParameter("id", id)
                 .setParameter("status", Status.DONE.ordinal())
                 .getResultList();

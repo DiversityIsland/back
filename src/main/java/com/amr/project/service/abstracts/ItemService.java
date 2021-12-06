@@ -15,13 +15,15 @@ public interface ItemService extends ReadWriteService<Item, Long> {
 
     List<Item> getItemsByShopId(Long id);
 
-    List<Item> getRegistredItemsByShopId(Long id);
+    List<Item> SetRegistredItemsByShopId(Long id);
+
+    List<Item> SetPaidItemsByShopId(Long id);
 
     List<Item> getSoldItemsByShopId(Long id);
 
-    List<Item> getSentItemsByShopId(Long id);
+    List<Item> SetSentItemsByShopId(Long id);
 
-    List<Item> getDoneItemsByShopId(Long id);
+    List<Item> SetDoneItemsByShopId(Long id);
 
     List<Item> getUnmoderatedItems();
 

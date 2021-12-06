@@ -11,13 +11,15 @@ public interface ItemDao extends ReadWriteDAO<Item, Long> {
 
     List<Item> getItemsByShopId(Long id);
 
-    List<Item> getRegistredItemsByShopId(Long id);
+    List<Item> setRegistredItemsByShopId(Long id);
+
+    List<Item> setPaidItemsByShopId(Long id);
 
     List<Item> getSoldItemsByShopId(Long id);
 
-    List<Item> getSentItemsByShopId(Long id);
+    List<Item> setSentItemsByShopId(Long id);
 
-    List<Item> getDoneItemsByShopId(Long id);
+    List<Item> setDoneItemsByShopId(Long id);
 
     List<Item> getUnmoderatedItems();
 

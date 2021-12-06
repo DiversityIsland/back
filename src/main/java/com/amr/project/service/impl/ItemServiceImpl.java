@@ -39,9 +39,15 @@ public class ItemServiceImpl extends ReadWriteServiceImpl<Item, Long>
         return itemDao.getItemsByShopId(id);
     }
 
+//МЕТОДЫ НИЖЕ ДОЛЖНЫ БУДУТ РЕАЛИЗОВЫВАТЬ ПРОВЕРКУ НА СТАТУСНОСТЬ,ВОЗМОЖН НУЖНО БУДЕТ ТОЛЬК ДЛЯ ВСЕХ,КРОМЕ PAID
     @Override
-    public List<Item> getRegistredItemsByShopId(Long id) {
-        return itemDao.getRegistredItemsByShopId(id);
+    public List<Item> SetRegistredItemsByShopId(Long id) {
+        return itemDao.setRegistredItemsByShopId(id);
+    }
+
+    @Override
+    public List<Item> SetPaidItemsByShopId(Long id) {
+        return itemDao.setPaidItemsByShopId(id);
     }
 
     @Override
@@ -50,14 +56,16 @@ public class ItemServiceImpl extends ReadWriteServiceImpl<Item, Long>
     }
 
     @Override
-    public List<Item> getSentItemsByShopId(Long id) {
-        return itemDao.getSentItemsByShopId(id);
+    public List<Item> SetSentItemsByShopId(Long id) {
+        return itemDao.setSentItemsByShopId(id);
     }
 
     @Override
-    public List<Item> getDoneItemsByShopId(Long id) {
-        return null;
+    public List<Item> SetDoneItemsByShopId(Long id) {
+        return itemDao.setDoneItemsByShopId(id);
     }
+
+    //
 
     @Override
     public List<Item> getUnmoderatedItems() {
