@@ -3,7 +3,6 @@ package com.amr.project.dao.impl;
 
 import com.amr.project.dao.abstracts.ItemDao;
 import com.amr.project.model.entity.Item;
-import com.amr.project.model.entity.Review;
 import com.amr.project.model.enums.Status;
 import org.springframework.stereotype.Repository;
 
@@ -43,24 +42,26 @@ public class ItemDaoImpl extends ReadWriteDAOImpl<Item, Long> implements ItemDao
         return query.getResultList();
     }
 
-
+    //Меняет статус на START
     @Override
-    public List<Item> setRegistredItemsByShopId(Long id) {
-        return entityManager.createQuery("update Order s set s.id =: id where s.status = : status", Item.class)
+    public void setStartItemsByShopId(Long id) {
+        int status = 2;
+        entityManager.createQuery("update Order o set o.status =: status where o.id =: id")
+
+                .setParameter("status", Status.START)
                 .setParameter("id", id)
-                .setParameter("status", Status.REGISTRED.ordinal())
-                .getResultList();
+                .executeUpdate();
+    }
+    //Меняет статус на COMPLETE
+    @Override
+    public void setCompleteItemsByShopId(Long id) {
+         entityManager.createQuery("update Order o set o.status =: status where o.id =: id")
+                .setParameter("id", id)
+                .setParameter("status", Status.COMPLETE)
+                .executeUpdate();
     }
 
-    @Override
-    public List<Item> setPaidItemsByShopId(Long id) {
-        return entityManager.createQuery("update Order s set s.id =: id where s.status = : status", Item.class)
-                .setParameter("id", id)
-                .setParameter("status", Status.PAID.ordinal())
-                .getResultList();
-    }
 
-    //использоать что бы сменить статус на PAID
     @Override
     public List<Item> getSoldItemsByShopId(Long id) {
 
@@ -70,29 +71,29 @@ public class ItemDaoImpl extends ReadWriteDAOImpl<Item, Long> implements ItemDao
 
 
 
-        return entityManager. createNativeQuery(query, Item.class)
+        return entityManager. createNativeQuery(query)
                 .setParameter("id", id)
-                .setParameter("status", Status.PAID.ordinal())
+                .setParameter("status", Status.COMPLETE.ordinal())
                 .getResultList();
     }
 
-    //использоать что бы сменить статус на SENT
+    //Меняет статус на SENT
     @Override
-    public List<Item> setSentItemsByShopId(Long id) {
+    public void setSentItemsByShopId(Long id) {
 
-        return entityManager.createQuery("update Order s set s.id =: id where s.status = : status", Item.class)
+         entityManager.createQuery("update Order o set o.status =: status where o.id =: id")
                 .setParameter("id", id)
-                .setParameter("status", Status.SENT.ordinal())
-                .getResultList();
+                .setParameter("status", Status.SENT)
+                .executeUpdate();
     }
 
-    //использоать что бы сменить статус на DONE
+    //Меняет статус на DELIVERED
     @Override
-    public List<Item> setDoneItemsByShopId(Long id) {
-        return entityManager.createQuery("update Order s set s.id =: id where s.status = : status", Item.class)
+    public void setDeliveredItemsByShopId(Long id) {
+         entityManager.createQuery("update Order o set o.status =: status where o.id =: id")
                 .setParameter("id", id)
-                .setParameter("status", Status.DONE.ordinal())
-                .getResultList();
+                .setParameter("status", Status.DELIVERED)
+                .executeUpdate();
     }
 
 

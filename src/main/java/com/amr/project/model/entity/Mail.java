@@ -120,16 +120,16 @@ public class Mail {
             return null;
         }
         switch (order.getStatus()) {
-            case REGISTRED:
+            case START:
                 status = "Оформление";
                 break;
-            case PAID:
+            case COMPLETE:
                 status = "Укомплектован";
                 break;
             case SENT:
                 status = "Отправлен";
                 break;
-            case DONE:
+            case DELIVERED:
                 status = "Доставлен";
                 break;
         }

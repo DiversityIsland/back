@@ -38,6 +38,7 @@ public class Order {
     private Calendar date;
 
     @Column
+    @Enumerated(EnumType.ORDINAL)
     private Status status;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -51,7 +51,7 @@ public class PaymentApi {
     public void getStatus(String orderId) {
         String status = client.getBillInfo(orderId).getStatus().getValue().toString();
         // Когда будет готов OrderService здесь необходимо записать встатус "WAITING"(Ожидает оплаты)
-        while (!status.contains("PAID")) {
+        while (!status.contains("COMPLETE")) {
             try {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
@@ -59,6 +59,6 @@ public class PaymentApi {
             }
             status = client.getBillInfo(orderId).getStatus().getValue().toString();
         }
-        // А здесь записать в статус "PAID"(Оплачено)
+        // А здесь записать в статус "COMPLETE"(Оплачено)
     }
 }
