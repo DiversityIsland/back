@@ -98,7 +98,7 @@ public class OrderRestController {
             itemService.SetStartItemsByShopId(itemId);
         }catch (Exception e){
             LOGGER.warn("Произошла непредвиденная ошибка при смене статуса заказа!");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         LOGGER.info("Заказ " + id + " перемещен в статус START");
@@ -114,7 +114,7 @@ public class OrderRestController {
             itemService.SetCompleteItemsByShopId(itemId);
         }catch (Exception e){
             LOGGER.warn("Произошла непредвиденная ошибка при смене статуса заказа!");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         LOGGER.info("Заказ " + id + " перемещен в статус COMPLETE");
@@ -130,7 +130,7 @@ public class OrderRestController {
             itemService.SetSentItemsByShopId(itemId);
         }catch (Exception e){
             LOGGER.warn("Произошла непредвиденная ошибка при смене статуса заказа!");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         LOGGER.info("Заказ " + id + " перемещен в статус SENT");
@@ -147,7 +147,7 @@ public class OrderRestController {
             itemService.SetDeliveredItemsByShopId(itemId);
         }catch (Exception e){
             LOGGER.warn("Произошла непредвиденная ошибка при смене статуса заказа!");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         LOGGER.info("Заказ " + id + " перемещен в статус DELIVERED");
