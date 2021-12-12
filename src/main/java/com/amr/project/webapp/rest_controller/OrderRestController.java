@@ -3,10 +3,12 @@ package com.amr.project.webapp.rest_controller;
 import com.amr.project.converter.ItemMapper;
 import com.amr.project.converter.OrderMapper;
 import com.amr.project.model.dto.AddressDto;
+import com.amr.project.model.dto.CartItemDto;
 import com.amr.project.model.dto.ItemDto;
 import com.amr.project.model.dto.OrderDto;
 import com.amr.project.model.entity.Order;
 import com.amr.project.model.entity.User;
+import com.amr.project.model.enums.Status;
 import com.amr.project.service.abstracts.ItemService;
 import com.amr.project.service.abstracts.OrderService;
 import com.amr.project.service.abstracts.UserService;
@@ -19,8 +21,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/order")
@@ -54,9 +59,12 @@ public class OrderRestController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<OrderDto> saveOrder(@RequestBody List<ItemDto> items) {
+    public ResponseEntity<OrderDto> saveOrder(@RequestBody List<CartItemDto> items) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<User> userOp = userService.findByUsername(authentication.getName());
+
+        if(authentication.isAuthenticated() && userOp.isPresent()) {
+            Order order = orderService.collectOrderByUserAndItems(items.stream().map(CartItemDto::getItem).collect(Collectors.toList()), userOp.get());
 
         if (authentication.isAuthenticated() && userOp.isPresent()) {
             Order order = orderService.collectOrderByUserAndItems(items, userOp.get());

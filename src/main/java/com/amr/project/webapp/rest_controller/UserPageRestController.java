@@ -90,6 +90,8 @@ public class UserPageRestController {
         if(authentication.isAuthenticated() && userOp.isPresent()) {
             User user = userOp.get();
             logger.info("Пользователь с id = " + user.getId().toString() + " получил список своих заказов");
+            //проверяем стутус оплаты через Qiwi Api
+            userPageOrderService.checkQiwiPaymentStatus(user.getId());
             return new ResponseEntity<>(userPageOrderService.getOrdersByUserId(user.getId()), HttpStatus.OK);
         }
         return ResponseEntity.notFound().build();

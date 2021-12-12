@@ -8,10 +8,13 @@ import java.util.List;
 
 @Repository
 public class UserPageOrderDaoImpl extends ReadWriteDAOImpl<Order, Long> implements UserPageOrderDao {
+
     @Override
     public List<Order> getOrdersByUserId(Long userId) {
         return entityManager.createQuery("select o from Order o where o.user.id = :userId")
                 .setParameter("userId", userId)
                 .getResultList();
+
+
     }
 }

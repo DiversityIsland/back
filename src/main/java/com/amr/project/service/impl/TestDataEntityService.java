@@ -2,6 +2,7 @@ package com.amr.project.service.impl;
 
 import com.amr.project.model.entity.*;
 import com.amr.project.model.enums.Gender;
+import com.amr.project.model.enums.PaymentStatus;
 import com.amr.project.model.enums.Status;
 import com.amr.project.service.abstracts.*;
 import lombok.SneakyThrows;
@@ -917,6 +918,21 @@ public class TestDataEntityService {
                 .isModerateAccept(true)
                 .build();
         itemService.persist(item17);
+
+        Item item99 = Item.builder()
+                .name("Киви")
+                .basePrice(BigDecimal.valueOf(1))
+                .price(BigDecimal.valueOf(1))
+                .categories(categories)
+                .images(images)
+                .count(7)
+                .rating(19)
+                .description("Платёжная система")
+                .shop(shops[3])
+                .isModerated(true)
+                .isModerateAccept(true)
+                .build();
+        itemService.persist(item99);
     }
 
     private void createOrderEntity() {
@@ -933,6 +949,8 @@ public class TestDataEntityService {
         Set<Item> itemSet4 = new HashSet<>(allItems.subList(3, 12));
         Set<Item> itemSet5 = new HashSet<>(allItems.subList(0, 11));
         Set<Item> itemSet6 = new HashSet<>(allItems.subList(7, 10));
+        Set<Item> itemSet99= new HashSet<>();
+        itemSet99.add(itemService.getByName("Киви"));
 
         Order order1 = Order.builder()
                 .items(itemSet1)
@@ -944,6 +962,7 @@ public class TestDataEntityService {
                 .user(user1)
                 .buyerName(user1.getFirstName())
                 .buyerPhone(user1.getPhone())
+                .paymentStatus(PaymentStatus.PAID)
                 .build();
         orderService.persist(order1);
 
@@ -957,6 +976,7 @@ public class TestDataEntityService {
                 .user(user2)
                 .buyerName(user2.getFirstName())
                 .buyerPhone(user2.getPhone())
+                .paymentStatus(PaymentStatus.WAITING)
                 .build();
         orderService.persist(order2);
 
@@ -970,6 +990,7 @@ public class TestDataEntityService {
                 .user(user3)
                 .buyerName(user3.getFirstName())
                 .buyerPhone(user3.getPhone())
+                .paymentStatus(PaymentStatus.PAID)
                 .build();
         orderService.persist(order3);
 
@@ -983,6 +1004,7 @@ public class TestDataEntityService {
                 .user(user1)
                 .buyerName(user1.getFirstName())
                 .buyerPhone(user1.getPhone())
+                .paymentStatus(PaymentStatus.PAID)
                 .build();
         orderService.persist(order4);
 
@@ -996,6 +1018,7 @@ public class TestDataEntityService {
                 .user(user2)
                 .buyerName(user2.getFirstName())
                 .buyerPhone(user2.getPhone())
+                .paymentStatus(PaymentStatus.PAID)
                 .build();
         orderService.persist(order5);
 
@@ -1009,8 +1032,24 @@ public class TestDataEntityService {
                 .user(user3)
                 .buyerName(user3.getFirstName())
                 .buyerPhone(user3.getPhone())
+                .paymentStatus(PaymentStatus.WAITING)
                 .build();
         orderService.persist(order6);
+
+        Order order99 = Order.builder()
+                .items(itemSet99)
+                .date(Calendar.getInstance())
+                .status(Status.COMPLETE)
+                .address(addressService.getByKey(1L))
+                .total(BigDecimal.valueOf(itemSet99.stream()
+                        .mapToInt(item -> item.getPrice().intValue()).sum()))
+                .user(user2)
+                .buyerName(user2.getFirstName())
+                .buyerPhone(user2.getPhone())
+                .paymentStatus(PaymentStatus.WAITING)
+                .build();
+        orderService.persist(order99);
+
 
     }
 

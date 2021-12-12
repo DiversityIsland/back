@@ -5,6 +5,8 @@ import com.amr.project.dao.abstracts.OrderDao;
 import com.amr.project.model.dto.ItemDto;
 import com.amr.project.model.dto.OrderDto;
 import com.amr.project.model.entity.*;
+import com.amr.project.model.enums.PaymentStatus;
+import com.amr.project.model.enums.Status;
 import com.amr.project.service.abstracts.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,6 +53,10 @@ public class OrderServiceImpl extends ReadWriteServiceImpl<Order, Long> implemen
         order.setUser(user);
         order.setBuyerName(user.getFirstName());
         order.setBuyerPhone(user.getPhone());
+
+        order.setDate(new GregorianCalendar());
+        order.setStatus(Status.START);
+        order.setPaymentStatus(PaymentStatus.WAITING);
 
         BigDecimal total = items.stream()
                 .map(i -> i.getPrice())

@@ -75,7 +75,7 @@
         <div class="shadow" style="width:850px; height:auto; background-color: #fff; padding-top: 10px; padding-bottom:20px; padding-left: 10px;">
             <div class="row">
                 <div class="col-12">
-                    <h5>Проверьте ваш заказ:</h5>
+                    <h5>Заказ создан.Проверьте данные:</h5>
                 </div>
                 <div class="col-12">
                     <hr style="width:100%; margin: 0;">
@@ -152,6 +152,7 @@
         //===============
         $('#complete_order').on('click', function () {
             location.replace("http://localhost:8888/payment/" + orderId);
+            // location.replace("/payment/" + 7);
         })
     })
     //Удаляем итем из ордера

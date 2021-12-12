@@ -45,4 +45,7 @@ public class OrderDto {
 
     private String paymentCurrency;
 
+    private String paymentStatus;
+
 }
+

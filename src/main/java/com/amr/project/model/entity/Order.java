@@ -61,4 +61,7 @@ public class Order {
     private PaymentStatus paymentStatus;
 
 
+    @Column
+//    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
 }
