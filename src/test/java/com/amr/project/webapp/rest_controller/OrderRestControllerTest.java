@@ -28,30 +28,29 @@ class OrderRestControllerTest {
     @Test
     void setStatusStart() throws Exception {
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/order/start/1");
-        mockMvc.perform(requestBuilder)
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/order/start/1"))
                 .andExpect(status().isOk());
     }
 
     @Test
     void setStatusComplete() throws Exception {
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/order/complete/1");
-        mockMvc.perform(requestBuilder)
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/order/complete/1"))
                 .andExpect(status().isOk());
 
     }
 
     @Test
     void setStatusSent() throws Exception {
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/order/sent/1");
-        mockMvc.perform(requestBuilder)
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/order/sent/1"))
                 .andExpect(status().isOk());
     }
 
     @Test
     void setStatusDelivered() throws  Exception{
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/order/sent/1");
-        mockMvc.perform(requestBuilder)
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/order/sent/1"))
                 .andExpect(status().isOk());
     }
 }
