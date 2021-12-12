@@ -8,11 +8,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,28 +29,29 @@ class OrderRestControllerTest {
     void setStatusStart() throws Exception {
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/order/start/1");
-        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-        assertEquals(200, result.getResponse().getStatus());
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk());
     }
 
     @Test
     void setStatusComplete() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/order/complete/1");
-        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-        assertEquals(200, result.getResponse().getStatus());
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk());
+
     }
 
     @Test
     void setStatusSent() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/order/sent/1");
-        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-        assertEquals(200, result.getResponse().getStatus());
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk());
     }
 
     @Test
     void setStatusDelivered() throws  Exception{
         RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/order/sent/1");
-        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-        assertEquals(200, result.getResponse().getStatus());
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk());
     }
 }
