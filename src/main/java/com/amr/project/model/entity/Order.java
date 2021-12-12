@@ -56,9 +56,8 @@ public class Order {
 
     @Column(name = "buyer_phone")
     private String buyerPhone;
-    @Column
 
-    private PaymentStatus paymentStatus;
+
 
 
     @Column

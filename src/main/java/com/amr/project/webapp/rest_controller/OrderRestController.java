@@ -66,8 +66,6 @@ public class OrderRestController {
         if(authentication.isAuthenticated() && userOp.isPresent()) {
             Order order = orderService.collectOrderByUserAndItems(items.stream().map(CartItemDto::getItem).collect(Collectors.toList()), userOp.get());
 
-        if (authentication.isAuthenticated() && userOp.isPresent()) {
-            Order order = orderService.collectOrderByUserAndItems(items, userOp.get());
             LOGGER.info("Пользователь создал заказ с id = " + order.getId().toString());
             return new ResponseEntity<>(orderMapper.orderToDto(order),
                     HttpStatus.OK);
@@ -83,14 +81,12 @@ public class OrderRestController {
         LOGGER.info("Пользователь обновил заказ с id = " + id.toString());
         return ResponseEntity.noContent().build();
     }
-
     @DeleteMapping("/deleteItem/{orderId}/{itemId}")
     public ResponseEntity<?> deleteItemInOrder(@PathVariable("orderId") Long orderId, @PathVariable("itemId") Long itemId) {
         orderService.deleteItemInOrder(orderId, itemId);
         LOGGER.info("Пользователь удалил итем с id = " + itemId.toString() + " из заказа с id = " + orderId.toString());
         return ResponseEntity.noContent().build();
     }
-
     @DeleteMapping("/{orderId}")
     public ResponseEntity<?> delete(@PathVariable("orderId") Long id) {
         orderService.deleteByKeyCascadeIgnore(id);
@@ -98,70 +94,71 @@ public class OrderRestController {
         return ResponseEntity.noContent().build();
     }
 
+
     @PutMapping("/start/{orderId}")
-    public ResponseEntity<?> setStatusStart(@PathVariable("orderId") String id) {
+        public ResponseEntity<?> setStatusStart(@PathVariable("orderId") String id) {
 
-        try {
-            Long itemId = Long.parseLong(id);
-            itemService.SetStartItemsByShopId(itemId);
-        }catch (Exception e){
-            LOGGER.warn("Произошла непредвиденная ошибка при смене статуса заказа!");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            try {
+                Long itemId = Long.parseLong(id);
+                itemService.SetStartItemsByShopId(itemId);
+            }catch (Exception e){
+                LOGGER.warn("Произошла непредвиденная ошибка при смене статуса заказа!");
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            LOGGER.info("Заказ " + id + " перемещен в статус START");
+            return new ResponseEntity(HttpStatus.OK);
+
+
         }
 
-        LOGGER.info("Заказ " + id + " перемещен в статус START");
-        return new ResponseEntity(HttpStatus.OK);
+        @PutMapping("/complete/{orderId}")
+        public ResponseEntity<?> setStatusComplete(@PathVariable("orderId") String id) {
+            try {
+                Long itemId = Long.parseLong(id);
+                itemService.SetCompleteItemsByShopId(itemId);
+            }catch (Exception e){
+                LOGGER.warn("Произошла непредвиденная ошибка при смене статуса заказа!");
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            LOGGER.info("Заказ " + id + " перемещен в статус COMPLETE");
+            return new ResponseEntity(HttpStatus.OK);
 
 
-    }
-
-    @PutMapping("/complete/{orderId}")
-    public ResponseEntity<?> setStatusComplete(@PathVariable("orderId") String id) {
-        try {
-            Long itemId = Long.parseLong(id);
-            itemService.SetCompleteItemsByShopId(itemId);
-        }catch (Exception e){
-            LOGGER.warn("Произошла непредвиденная ошибка при смене статуса заказа!");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        LOGGER.info("Заказ " + id + " перемещен в статус COMPLETE");
-        return new ResponseEntity(HttpStatus.OK);
+        @PutMapping("/sent/{orderId}")
+        public ResponseEntity<?> setStatusSent(@PathVariable("orderId") String id) {
+            try {
+                Long itemId = Long.parseLong(id);
+                itemService.SetSentItemsByShopId(itemId);
+            }catch (Exception e){
+                LOGGER.warn("Произошла непредвиденная ошибка при смене статуса заказа!");
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            LOGGER.info("Заказ " + id + " перемещен в статус SENT");
+            return new ResponseEntity(HttpStatus.OK);
 
 
-    }
 
-    @PutMapping("/sent/{orderId}")
-    public ResponseEntity<?> setStatusSent(@PathVariable("orderId") String id) {
-        try {
-            Long itemId = Long.parseLong(id);
-            itemService.SetSentItemsByShopId(itemId);
-        }catch (Exception e){
-            LOGGER.warn("Произошла непредвиденная ошибка при смене статуса заказа!");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        LOGGER.info("Заказ " + id + " перемещен в статус SENT");
-        return new ResponseEntity(HttpStatus.OK);
+        @PutMapping("/delivered/{orderId}")
+        public ResponseEntity<?> setStatusDelivered(@PathVariable("orderId") String id) {
+            try {
+                Long itemId = Long.parseLong(id);
+                itemService.SetDeliveredItemsByShopId(itemId);
+            }catch (Exception e){
+                LOGGER.warn("Произошла непредвиденная ошибка при смене статуса заказа!");
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            LOGGER.info("Заказ " + id + " перемещен в статус DELIVERED");
+            return new ResponseEntity(HttpStatus.OK);
 
 
 
-    }
-
-    @PutMapping("/delivered/{orderId}")
-    public ResponseEntity<?> setStatusDelivered(@PathVariable("orderId") String id) {
-        try {
-            Long itemId = Long.parseLong(id);
-            itemService.SetDeliveredItemsByShopId(itemId);
-        }catch (Exception e){
-            LOGGER.warn("Произошла непредвиденная ошибка при смене статуса заказа!");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        LOGGER.info("Заказ " + id + " перемещен в статус DELIVERED");
-        return new ResponseEntity(HttpStatus.OK);
-
-
-
-    }
 }
