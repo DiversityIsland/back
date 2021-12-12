@@ -8,11 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
-import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -48,7 +44,7 @@ class OrderRestControllerTest {
     }
 
     @Test
-    void setStatusDelivered() throws  Exception{
+    void setStatusDelivered() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/order/sent/1"))
                 .andExpect(status().isOk());
