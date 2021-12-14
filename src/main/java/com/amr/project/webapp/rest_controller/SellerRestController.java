@@ -44,7 +44,7 @@ public class SellerRestController {
         return str.chars().allMatch(Character::isDigit);
     }
 
-    // TODO: 02.08.2021 ПЕРЕПИСАТЬ ПОД RESPONSEENTRITY VOID, PATCH ВОЗВРАЩАЕТ ОБНОВЛЕННЫЙ ИТЕМ, С ФРОНТА ПРИХОДИТ ДТО -- DONE
+    // TODO: 02.08.2021 ПЕРЕПИСАТЬ ПОД RESPONSEENTRITY VOID, PATCH ВОЗВРАЩАЕТ ОБНОВЛЕННЫЙ ИТЕМ, С ФРОНТА ПРИХОДИТ ДТО -- DELIVERED
     @GetMapping("/{shopIdOrName}/settings")
     public ResponseEntity<ShopDto> getShop(@PathVariable("shopIdOrName") String shopIdOrName) {
         if (isNumeric(shopIdOrName)) {

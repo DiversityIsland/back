@@ -9,6 +9,7 @@ import com.amr.project.model.dto.OrderDto;
 import com.amr.project.model.entity.Order;
 import com.amr.project.model.entity.User;
 import com.amr.project.model.enums.Status;
+import com.amr.project.service.abstracts.ItemService;
 import com.amr.project.service.abstracts.OrderService;
 import com.amr.project.service.abstracts.UserService;
 import org.slf4j.Logger;
@@ -35,16 +36,18 @@ public class OrderRestController {
     private final OrderMapper orderMapper;
     private final ItemMapper itemMapper;
     private final UserService userService;
+    private final ItemService itemService;
 
     @Autowired
     public OrderRestController(OrderService orderService,
                                OrderMapper orderMapper,
                                ItemMapper itemMapper,
-                               UserService userService) {
+                               UserService userService, ItemService itemService) {
         this.userService = userService;
         this.itemMapper = itemMapper;
         this.orderService = orderService;
         this.orderMapper = orderMapper;
+        this.itemService = itemService;
     }
 
     @GetMapping("/{orderId}")
@@ -90,4 +93,72 @@ public class OrderRestController {
         LOGGER.info("Пользователь удалил заказ с id = " + id.toString());
         return ResponseEntity.noContent().build();
     }
+
+
+    @PutMapping("/start/{orderId}")
+        public ResponseEntity<?> setStatusStart(@PathVariable("orderId") String id) {
+
+            try {
+                Long itemId = Long.parseLong(id);
+                itemService.SetStartItemsByShopId(itemId);
+            }catch (Exception e){
+                LOGGER.warn("Произошла непредвиденная ошибка при смене статуса заказа!");
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            LOGGER.info("Заказ " + id + " перемещен в статус START");
+            return new ResponseEntity(HttpStatus.OK);
+
+
+        }
+
+        @PutMapping("/complete/{orderId}")
+        public ResponseEntity<?> setStatusComplete(@PathVariable("orderId") String id) {
+            try {
+                Long itemId = Long.parseLong(id);
+                itemService.SetCompleteItemsByShopId(itemId);
+            }catch (Exception e){
+                LOGGER.warn("Произошла непредвиденная ошибка при смене статуса заказа!");
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            LOGGER.info("Заказ " + id + " перемещен в статус COMPLETE");
+            return new ResponseEntity(HttpStatus.OK);
+
+
+        }
+
+        @PutMapping("/sent/{orderId}")
+        public ResponseEntity<?> setStatusSent(@PathVariable("orderId") String id) {
+            try {
+                Long itemId = Long.parseLong(id);
+                itemService.SetSentItemsByShopId(itemId);
+            }catch (Exception e){
+                LOGGER.warn("Произошла непредвиденная ошибка при смене статуса заказа!");
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            LOGGER.info("Заказ " + id + " перемещен в статус SENT");
+            return new ResponseEntity(HttpStatus.OK);
+
+
+
+        }
+
+        @PutMapping("/delivered/{orderId}")
+        public ResponseEntity<?> setStatusDelivered(@PathVariable("orderId") String id) {
+            try {
+                Long itemId = Long.parseLong(id);
+                itemService.SetDeliveredItemsByShopId(itemId);
+            }catch (Exception e){
+                LOGGER.warn("Произошла непредвиденная ошибка при смене статуса заказа!");
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            LOGGER.info("Заказ " + id + " перемещен в статус DELIVERED");
+            return new ResponseEntity(HttpStatus.OK);
+
+
+
+        }
 }

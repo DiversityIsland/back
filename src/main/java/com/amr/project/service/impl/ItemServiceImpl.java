@@ -39,10 +39,33 @@ public class ItemServiceImpl extends ReadWriteServiceImpl<Item, Long>
         return itemDao.getItemsByShopId(id);
     }
 
+
+    @Override
+    public void SetStartItemsByShopId(Long id) {
+        itemDao.setStartItemsByShopId(id);
+    }
+
+    @Override
+    public void SetCompleteItemsByShopId(Long id) {
+        itemDao.setCompleteItemsByShopId(id);
+    }
+
     @Override
     public List<Item> getSoldItemsByShopId(Long id) {
         return itemDao.getSoldItemsByShopId(id);
     }
+
+    @Override
+    public void SetSentItemsByShopId(Long id) {
+         itemDao.setSentItemsByShopId(id);
+    }
+
+    @Override
+    public void SetDeliveredItemsByShopId(Long id) {
+         itemDao.setDeliveredItemsByShopId(id);
+    }
+
+
 
     @Override
     public List<Item> getUnmoderatedItems() {
