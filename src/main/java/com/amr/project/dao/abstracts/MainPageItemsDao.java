@@ -10,4 +10,6 @@ public interface MainPageItemsDao extends ReadWriteDAO<Item, Long> {
     List<Item> findItems();
     Long findCountItemsByCategoryId(Long id);
     List<Item> findItemsByCategoryIdWithPagination(Long id, int pageNum, int pageSize);
+    List<Item> searchItemsMainByName(String itemName);
+
 }

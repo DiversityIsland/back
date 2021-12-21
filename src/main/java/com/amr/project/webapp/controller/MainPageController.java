@@ -85,4 +85,12 @@ public class MainPageController {
                 HttpStatus.OK);
     }
 
+
+   /* @GetMapping("/search/{itemName}")
+    @ResponseBody
+    public ResponseEntity<List<ItemDto>> searchItemsMainByName(@PathVariable("itemName") String itemName) {
+        return new ResponseEntity<>(mainPageItemService.searchItemsMainByName(itemName), HttpStatus.OK);
+    }*/
+
+
 }

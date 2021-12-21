@@ -15,4 +15,8 @@ public interface MainPageItemService extends ReadWriteService<Item, Long> {
     Long findLastPageItemsByCategoryId(Long id, int pageSize);
 
     List<ItemDto> findItemsByCategoryIdWithPagination(Long id, int pageNum, int pageSize);
+
+    List<ItemDto> searchItemsMainByName(String itemName);
+
+
 }
