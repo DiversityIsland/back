@@ -427,10 +427,11 @@
             loginModal.modal('show');
         })
 
-        /**
-         * обработчик
-         * обработка поиска
-         */
+
+        /*
+                Обработка кнопки поисковика
+
+        */
         $(search_btn).on('click', function (e) {
             e.preventDefault();
             toggleClassesContent($(this));
@@ -438,18 +439,22 @@
             let valueSearch = search_input.val();
             search_input.val('');
 
-            /**
-             * обрабочтик
-             * проверка на пустое значение поиска
-             */
+        /*
+                Проверка на пустое значения поля в поисковике
+        */
+
             if (valueSearch === '') {
                 dinamic_head.html('');
-                dinamic_head.html('Все товары')
+                dinamic_head.html('Введите наименование товара');
+
             } else {
                 dinamic_head.html('');
                 dinamic_head.html('Результат запроса "' + valueSearch + '"');
             }
+            searchItemsMainByName(valueSearch);
         })
+
+
 
         /**
          * обработчик
@@ -484,9 +489,42 @@
              */
             searchByCategory($(this));
         })
-
-
     })
+
+
+    /*
+        отправляет GET запрос на /api/mainpage/search/{itemName} = поиск элементов
+        генерирует html из массива итемов на странице
+    */
+
+    async function searchItemsMainByName(itemName) {
+        let url = "api/mainpage/search/" + itemName;
+        let response = await fetch(url);
+        if(response.ok) {
+            let json = await response.json();
+            console.log(json);
+            let searchItemsMainByName = "";
+            for(let i = 0; i < json.length; i++) {
+                searchItemsMainByName += '<div class="card" style="width: 18rem; margin-right: 15px; margin-top: 20px;">\n' +
+                    '                        <img src="' + json[i].images[0] + '" class="card-img-top" style="height: 180px;" alt="...">\n' +
+                    '                        <div class="card-body">\n' +
+                    '                            <h5 class="card-title">' + json[i].name + '</h5>\n' +
+                    '                            <p class="card-text">' + json[i].description + '</p>\n' +
+                    '                            <div class="d-flex">' +
+                    '                                    <a href="#" class="btn btn-danger" style="width: 150px;">В корзину</a>' +
+                    '                                    <a href="/product/' + json[i].id + '" class="btn btn-primary" style="margin-left: 10px;">Смотреть</a>' +
+                    '                            </div>' +
+                    '                        </div>\n' +
+                    '               </div>'
+            }
+            dinamic_inner_content.html("");
+            dinamic_inner_content.html(searchItemsMainByName);
+        }
+    }
+
+
+
+
 
     /**
      * отправляет GET запрос на /home/category/id/firstPage/pageSize = категории
