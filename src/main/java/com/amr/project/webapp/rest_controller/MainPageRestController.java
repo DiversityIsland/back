@@ -40,9 +40,9 @@ public class MainPageRestController {
         return new ResponseEntity<>(itemsDto, HttpStatus.OK);
     }
 
-    @GetMapping("/search/{itemName}")
+    @GetMapping("/search/{searchWords}")
     @ResponseBody
-    public ResponseEntity<List<ItemDto>> searchItemsMainByName(@PathVariable("itemName") String itemName) {
+    public ResponseEntity<List<ItemDto>> searchItemsMainByName(@PathVariable("searchWords") String itemName) {
         return new ResponseEntity<>(mainPageItemService.searchItemsMainByName(itemName),
                 HttpStatus.OK);
     }

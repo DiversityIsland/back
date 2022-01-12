@@ -1,8 +1,11 @@
 package com.amr.project.service.impl;
 
+import com.amr.project.converter.ItemMapper;
 import com.amr.project.dao.abstracts.ItemDao;
+import com.amr.project.model.dto.ItemDto;
 import com.amr.project.model.entity.Item;
 import com.amr.project.service.abstracts.ItemService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +21,13 @@ import java.util.List;
 public class ItemServiceImpl extends ReadWriteServiceImpl<Item, Long>
         implements ItemService {
     private final ItemDao itemDao;
+    private final ItemMapper itemMapper;
 
-    public ItemServiceImpl(ItemDao itemDao) {
+    @Autowired
+    public ItemServiceImpl(ItemDao itemDao, ItemMapper itemMapper) {
         super(itemDao);
         this.itemDao = itemDao;
+        this.itemMapper = itemMapper;
     }
 
     @Override
@@ -83,5 +89,30 @@ public class ItemServiceImpl extends ReadWriteServiceImpl<Item, Long>
         item.setPretendentToBeDeleted(true);
         super.update(item);
     }
+
+    @Override
+    public List<ItemDto> findByName(String name) {
+        String[] words = name.toLowerCase().split("[\\p{Punct}\\s]+");
+        List<ItemDto> itemsDto = itemMapper.toItemsDto(
+                itemDao.searcheByWords(words)
+        );
+        itemsDto.sort( (a, b) -> {
+            String nameA = a.getName().toLowerCase();
+            String nameB = b.getName().toLowerCase();
+            int countA = 0;
+            int countB = 0;
+            for(String word : words) {
+                if(nameA.contains(word)) {
+                    countA++;
+                }
+                if(nameB.contains(word)) {
+                    countB++;
+                }
+            }
+            return countB - countA;
+        });
+        return itemsDto;
+    }
+
 }
 

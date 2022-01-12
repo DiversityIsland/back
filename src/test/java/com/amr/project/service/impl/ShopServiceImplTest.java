@@ -1,9 +1,11 @@
 package com.amr.project.service.impl;
 
 import com.amr.project.converter.ShopMapper;
+import com.amr.project.model.dto.ItemDto;
 import com.amr.project.model.dto.ShopDto;
 import com.amr.project.model.entity.Shop;
 import com.amr.project.model.entity.User;
+import com.amr.project.service.abstracts.ItemService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -23,6 +25,7 @@ public class ShopServiceImplTest {
     ShopServiceImpl shopService;
     private ShopDto shopDto;
     private User user;
+    private ItemService itemService;
 
     @Mock
     private ShopMapper shopMapper;
@@ -50,6 +53,14 @@ public class ShopServiceImplTest {
         assertNotNull(shop.getLogo());
         assertNotNull(shop.getUser());
         assertNotNull(shop.getLocation());
+    }
+
+    @Test
+    public void searcheOfItemsByText() {
+        for(int i = 0; i < 50; i++) { System.out.println(" ");}
+        for(ItemDto item : itemService.findByName("Телефон Samsung")) {
+            System.out.println(item);
+        }
     }
 
     @Test
