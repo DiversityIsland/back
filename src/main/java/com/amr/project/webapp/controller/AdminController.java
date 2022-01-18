@@ -12,6 +12,7 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String registerUser() {
+        System.out.println("========================== \\admin ===========================");
         return "admin_panel";
     }
 

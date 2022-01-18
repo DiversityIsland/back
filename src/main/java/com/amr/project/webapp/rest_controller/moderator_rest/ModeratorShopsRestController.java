@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
  * @project platform
  */
 
+@CrossOrigin(origins = "http://localhost")
 @RestController
 @RequestMapping("/moderator/api/shops")
 public class ModeratorShopsRestController {

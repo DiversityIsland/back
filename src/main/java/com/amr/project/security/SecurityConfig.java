@@ -17,6 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 
@@ -60,11 +63,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .userInfoEndpoint().userService(oAuth2UserService)
                 .and()
-                .successHandler(oAuth2LoginSuccessHandler);
+                .successHandler(oAuth2LoginSuccessHandler)
+                .and().cors();
 
         http.formLogin()
                 .successHandler(successUserHandler)
-                .authenticationDetailsSource(authenticationDetailsSource);
+                .authenticationDetailsSource(authenticationDetailsSource)
+        ;
 
 
         http.logout().permitAll()
