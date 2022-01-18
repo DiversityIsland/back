@@ -25,4 +25,6 @@ public interface ItemDao extends ReadWriteDAO<Item, Long> {
 
     List<Item> getModeratedItems();
 
+    List<Item> searcheByWords(String[] words);
+
 }

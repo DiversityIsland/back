@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ import java.util.List;
         ReferenceCategoryMapper.class,
         ReferenceImageMapper.class, ReferenceReviewMapper.class, ReviewMapper.class},
         componentModel = "spring")
+@Component
 public interface ItemMapper {
 
     @Mappings({@Mapping(source = "shop.id", target = "shopId")})

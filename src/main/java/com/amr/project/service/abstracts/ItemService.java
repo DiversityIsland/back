@@ -1,5 +1,6 @@
 package com.amr.project.service.abstracts;
 
+import com.amr.project.model.dto.ItemDto;
 import com.amr.project.model.entity.Item;
 
 import java.util.List;
@@ -30,4 +31,6 @@ public interface ItemService extends ReadWriteService<Item, Long> {
     List<Item> findModeratedShops();
 
     void makeItemPretendentToBeDeletedById(Long id);
+
+    public List<ItemDto> findByName(String name);
 }
