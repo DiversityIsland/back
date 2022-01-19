@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
  * @project platform
  */
 
+@CrossOrigin(origins = "http://localhost")
 @RestController
 @RequestMapping("/moderator/api/reviews")
 public class ModeratorReviewRestController {
@@ -54,6 +55,7 @@ public class ModeratorReviewRestController {
                 new ResponseEntity<>(reviewMapper.reviewToReviewDto(reviewService.getByKey(id)), HttpStatus.OK);
     }
 
+//    @CrossOrigin
     @PutMapping("/editReview")
     public ResponseEntity<ReviewDto> editReview(@RequestBody ReviewDto reviewDto) {
         Review review = reviewMapper.reviewDtoToReview(reviewDto);

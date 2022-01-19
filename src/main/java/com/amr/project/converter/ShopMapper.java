@@ -30,7 +30,10 @@ public interface ShopMapper {
             @Mapping(source = "user.username", target = "username"),
             @Mapping(source = "logo.url", target = "logo"),
             @Mapping(source = "location.name", target = "location"),
-            @Mapping(source = "logo.picture", target = "logoarray")
+            @Mapping(source = "logo.picture", target = "logoarray"),
+            @Mapping(source = "moderated", target = "moderated"),
+            @Mapping(source = "moderateAccept", target = "moderateAccept"),
+            @Mapping(source = "moderatedRejectReason", target = "moderatedRejectReason")
     })
     ShopDto shopToShopDto(Shop shop);
 
@@ -38,15 +41,15 @@ public interface ShopMapper {
             @Mapping(source = "username", target = "user.username"),
             @Mapping(source = "location", target = "location.name"),
             @Mapping(source = "logo", target = "logo.url"),
-            @Mapping(source = "logoarray", target = "logo.picture")
+            @Mapping(source = "logoarray", target = "logo.picture"),
+            @Mapping(source = "moderated", target = "isModerated"),
+            @Mapping(source = "moderateAccept", target = "isModerateAccept"),
+            @Mapping(source = "moderatedRejectReason", target = "moderatedRejectReason")
     })
     Shop shopDtoToShop(ShopDto shopDto);
 
     default String map(byte[] picture) {
         String str_ = "data:jpg;base64,";
-        /*String str = Arrays.toString(picture);
-        str.replace("[", "");
-        str.replace("[", "");*/
         str_ += Base64.encode(picture);
         return str_;
     }
@@ -54,10 +57,7 @@ public interface ShopMapper {
     default byte[] map(String logoarray) {
         if (logoarray != null) {
             String[] stringBytesArray = logoarray.split(",");
-            byte[] picture = new byte[stringBytesArray.length];
-            for (int i = 0; i < picture.length; i++) {
-                picture[i] = Byte.parseByte(stringBytesArray[i].trim());
-            }
+            byte[] picture = java.util.Base64.getEncoder().encode(stringBytesArray[1].trim().getBytes());
             return picture;
         } else return null;
     }

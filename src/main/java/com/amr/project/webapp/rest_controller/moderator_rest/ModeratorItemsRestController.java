@@ -5,11 +5,14 @@ import com.amr.project.model.dto.ItemDto;
 import com.amr.project.service.abstracts.ItemService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
+import org.apache.http.Header;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -17,6 +20,7 @@ import java.util.stream.Collectors;
  * @project platform
  */
 
+@CrossOrigin(origins = "http://localhost")
 @Api(value = "API для модератора", description = "Предоставляет набор методов для одобрения товаров")
 @RequestMapping("/moderator/api/items")
 @RestController
@@ -31,7 +35,6 @@ public class ModeratorItemsRestController {
         this.itemMapper = itemMapper;
     }
 
-
     @Operation(
             summary = "Получение немодерированных предметов",
             description = "Возвращает все предметы у которых флаг isModerated = false"
@@ -45,7 +48,6 @@ public class ModeratorItemsRestController {
                         .collect(Collectors.toList()),
                 HttpStatus.OK);
     }
-
 
     @GetMapping("/getOneUnmoderatedItem/{id}")
     public ResponseEntity<ItemDto> getOneUnmoderatedItem(@PathVariable("id") Long id) {
