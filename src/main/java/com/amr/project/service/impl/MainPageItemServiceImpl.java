@@ -55,4 +55,9 @@ public class MainPageItemServiceImpl extends ReadWriteServiceImpl<Item, Long> im
     public List<ItemDto> findItemsByCategoryIdWithPagination(Long id, int pageNum, int pageSize) {
         return itemMapper.toItemsDto(mainPageItemsDAO.findItemsByCategoryIdWithPagination(id, pageNum, pageSize));
     }
+
+    @Override
+    public List<ItemDto> searchItemsMainByName(String itemName) {
+        return itemMapper.toItemsDto(mainPageItemsDAO.searchItemsMainByName(itemName));
+    }
 }

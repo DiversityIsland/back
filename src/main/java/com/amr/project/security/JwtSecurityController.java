@@ -17,19 +17,18 @@ import java.util.Optional;
 @RequestMapping("/")
 public class JwtSecurityController {
 
-    private UserDao userDao;
+    private final UserDao userDao;
 
     JwtSecurityController(UserDao userDao) {
         this.userDao = userDao;
     }
 
-    @GetMapping("/authserver")
-    @ResponseBody
-    public ResponseEntity<User> getUserCredentials(@RequestParam("username") String username,
-                                                   @RequestParam("password") String password) {
+    @PostMapping("/authentication")
+    //TODO переделать на ДТО и отправлять только нужные поля
+    public ResponseEntity<User> getUserCredentials(@RequestBody User user) {
 
-        Optional<User> tempUser = userDao.findByUsername(username);
-        if (tempUser.isPresent() && password.equals(tempUser.get().getPassword())) {
+        Optional<User> tempUser = userDao.findByUsername(user.getUsername());
+        if (tempUser.isPresent() && user.getPassword().equals(tempUser.get().getPassword())) {
             User userCredentials = new User(tempUser.get().getId(), tempUser.get().getUsername(), tempUser.get().getRoles());
             return new ResponseEntity<>(userCredentials, HttpStatus.OK);
         } else

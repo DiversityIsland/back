@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 @ConditionalOnMissingClass({"org.springframework.boot.test.context.SpringBootTest"})
 public class InitDB implements CommandLineRunner {
 
-    @Autowired
-    private TestDataEntityService testDataEntityService;
+   @Autowired
+   private TestDataEntityService testDataEntityService;
 
-    @Override
-    public void run(String... args) throws Exception {
-        testDataEntityService.createEntity();
-    }
+   @Override
+   public void run(String... args) throws Exception {
+      testDataEntityService.createEntity();
+   }
 }

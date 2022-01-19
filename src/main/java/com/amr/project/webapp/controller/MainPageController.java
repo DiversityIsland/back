@@ -3,10 +3,7 @@ package com.amr.project.webapp.controller;
 
 import com.amr.project.model.dto.ItemDto;
 import com.amr.project.model.entity.User;
-import com.amr.project.service.abstracts.CategoryService;
-import com.amr.project.service.abstracts.MainPageItemService;
-import com.amr.project.service.abstracts.MainPageShopService;
-import com.amr.project.service.abstracts.UserService;
+import com.amr.project.service.abstracts.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,14 +29,15 @@ public class MainPageController {
     private final MainPageShopService mainPageShopService;
     private final UserService userService;
     private final CategoryService categoryService;
+    private final ItemService itemService;
 
     @Autowired
-    public MainPageController(MainPageItemService mainPageItemService, MainPageShopService mainPageShopService,
-                              UserService userService, CategoryService categoryService) {
+    public MainPageController(MainPageItemService mainPageItemService, MainPageShopService mainPageShopService, UserService userService, CategoryService categoryService, ItemService itemService) {
         this.mainPageItemService = mainPageItemService;
         this.mainPageShopService = mainPageShopService;
         this.userService = userService;
         this.categoryService = categoryService;
+        this.itemService = itemService;
     }
 
     /**
@@ -84,5 +82,14 @@ public class MainPageController {
         return new ResponseEntity<>(mainPageItemService.findItemsByCategoryId(id),
                 HttpStatus.OK);
     }
+
+    @GetMapping("/search/{searchWords}")
+    @ResponseBody
+    public ResponseEntity<List<ItemDto>> findItemsByName(@PathVariable String searchWords) {
+        return new ResponseEntity<>(itemService.findByName(searchWords),
+                HttpStatus.OK);
+    }
+
+
 
 }

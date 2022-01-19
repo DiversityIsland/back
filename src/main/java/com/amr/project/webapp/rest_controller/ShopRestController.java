@@ -33,10 +33,11 @@ public class ShopRestController {
     private final ImageMapper imageMapper;
     private final ItemService itemService;
     private final ItemMapper itemMapper;
+    private final MainPageShopService mainPageShopService;
 
     @Autowired
     public ShopRestController(ShopService shopService, ShopMapper shopMapper, CountryService countryService, UserService userService,
-                              ImageService imageService, ImageMapper imageMapper, ItemService itemService, ItemMapper itemMapper) {
+                              ImageService imageService, ImageMapper imageMapper, ItemService itemService, ItemMapper itemMapper, MainPageShopService mainPageShopService) {
         this.shopService = shopService;
         this.shopMapper = shopMapper;
         this.countryService = countryService;
@@ -45,6 +46,15 @@ public class ShopRestController {
         this.imageMapper = imageMapper;
         this.itemService = itemService;
         this.itemMapper = itemMapper;
+        this.mainPageShopService = mainPageShopService;
+    }
+
+    /*
+     * json список популярных магазинов
+     * */
+    @GetMapping("/popular")
+    public ResponseEntity<List<ShopDto>> getShop() {
+        return new ResponseEntity<>(mainPageShopService.findPopularShops(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

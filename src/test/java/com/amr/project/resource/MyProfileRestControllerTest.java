@@ -76,36 +76,36 @@ public class MyProfileRestControllerTest extends AbstractIntegrationTest{
         @Test
         void updateUser_invalid_id() throws Exception {
             this.mockMvc.perform(put("/api/user/1")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{" +
-                            "\"id\": \"3\"," +
-                            "\"email\": \"name3@mail.ru\"," +
-                            "\"username\": \"name3@mail.ru\"," +
-                            "\"password\": \"333333\"," +
-                            "\"phone\": \"89269993333\"," +
-                            "\"firstName\": \"name3\"," +
-                            "\"lastName\": \"lastname3\"," +
-                            "\"age\": \"30\"," +
-                            "\"roles\": " +
-                            "[{" +
-                            "\"id\": \"3\"," +
-                            "\"name\": \"USER\"," +
-                            "\"authority\": \"USER\"" +
-                            "}]," +
-                            "\"address\": " +
-                            "{" +
-                            "\"id\": \"3\"," +
-                            "\"cityIndex\": \"city_index3\"," +
-                            "\"country\": \"country3\"," +
-                            "\"city\": \"city3\"," +
-                            "\"street\": \"street3\"," +
-                            "\"house\": \"3\"" +
-                            "}," +
-                            "\"birthday\": \"22-11-1977\"," +
-                            "\"gender\": \"MALE\"" +
-                            "}"))
-                    .andDo(print())
-                    .andExpect(status().isBadRequest());
-        }
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
+                        "\"id\": \"3\"," +
+                        "\"email\": \"name3@mail.ru\"," +
+                        "\"username\": \"name3@mail.ru\"," +
+                        "\"password\": \"333333\"," +
+                        "\"phone\": \"89269993333\"," +
+                        "\"firstName\": \"name3\"," +
+                        "\"lastName\": \"lastname3\"," +
+                        "\"age\": \"30\"," +
+                        "\"roles\": " +
+                        "[{" +
+                        "\"id\": \"3\"," +
+                        "\"name\": \"USER\"," +
+                        "\"authority\": \"USER\"" +
+                        "}]," +
+                        "\"address\": " +
+                        "{" +
+                        "\"id\": \"3\"," +
+                        "\"cityIndex\": \"city_index3\"," +
+                        "\"country\": \"country3\"," +
+                        "\"city\": \"city3\"," +
+                        "\"street\": \"street3\"," +
+                        "\"house\": \"3\"" +
+                        "}," +
+                        "\"birthday\": \"22-11-1977\"," +
+                        "\"gender\": \"MALE\"" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
+}
 

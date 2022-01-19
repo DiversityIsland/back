@@ -4,10 +4,7 @@ import com.amr.project.model.dto.ItemDto;
 import com.amr.project.service.abstracts.MainPageItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,4 +39,12 @@ public class MainPageRestController {
         List<ItemDto> itemsDto = mainPageItemService.findItemsByCategoryIdWithPagination(id, pagenum, pageSize);
         return new ResponseEntity<>(itemsDto, HttpStatus.OK);
     }
+
+    @GetMapping("/search/{searchWords}")
+    @ResponseBody
+    public ResponseEntity<List<ItemDto>> searchItemsMainByName(@PathVariable("searchWords") String itemName) {
+        return new ResponseEntity<>(mainPageItemService.searchItemsMainByName(itemName),
+                HttpStatus.OK);
+    }
+
 }

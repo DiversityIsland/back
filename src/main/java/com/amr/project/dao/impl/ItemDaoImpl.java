@@ -1,13 +1,16 @@
 package com.amr.project.dao.impl;
 
-
 import com.amr.project.dao.abstracts.ItemDao;
 import com.amr.project.model.entity.Item;
 import com.amr.project.model.enums.Status;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
+
 
 @Repository
 public class ItemDaoImpl extends ReadWriteDAOImpl<Item, Long> implements ItemDao {
@@ -107,6 +110,17 @@ public class ItemDaoImpl extends ReadWriteDAOImpl<Item, Long> implements ItemDao
     public List<Item> getModeratedItems() {
         return entityManager.createQuery("SELECT i from Item i where i.isModerateAccept = true and i.isModerated = true ", Item.class)
                 .getResultList();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Item> searcheByWords(@NotNull String[] words) {
+        StringBuilder endQuery = new StringBuilder("SELECT i FROM Item i WHERE i.name LIKE '%")
+                .append(words[0]).append("%'");
+        for(int i = 1; i < words.length; i++) {
+            endQuery.append(" or i.name LIKE '%").append(words[i]).append("%'");
+        }
+        return entityManager.createQuery(endQuery.toString(), Item.class).getResultList();
     }
 }
 

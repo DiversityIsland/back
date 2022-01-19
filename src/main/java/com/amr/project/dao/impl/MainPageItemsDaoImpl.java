@@ -51,4 +51,12 @@ public class MainPageItemsDaoImpl extends ReadWriteDAOImpl<Item, Long> implement
                 .setMaxResults(pageSize)
                 .getResultList();
     }
+
+    @Override
+    public List<Item> searchItemsMainByName(String itemName) {
+        return entityManager.createQuery("SELECT i FROM Item i WHERE i.name LIKE :itemName", Item.class)
+                .setParameter("itemName", "%" + itemName + "%")
+                .getResultList();
+    }
+
 }
