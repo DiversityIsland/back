@@ -10,8 +10,8 @@ async function getItems() {
 
         for (let i = 0; i < cartItems.length; i++) {
             // раскомментировать при добавлении функции подсчета скидки
-            // let desc = await fetch("/api/discounts/" + cartItems[i].shop.id);
-            // cartItems[i].desc = await desc.json();
+             let desc = await fetch("/api/discounts/" + cartItems[i].shop.id);
+             cartItems[i].desc = await desc.json();
         }
         console.log(cartItems);
     }
@@ -42,6 +42,7 @@ function insertCartItemRow(cartItem) {
         user: cartItem.user,
         desc: cartItem.desc
     };
+    let finalPrice = ci.item.price - ci.desc.fixedDiscount;
     i++;
     document.querySelector('#cartItems').insertAdjacentHTML('beforeend', `
     <div class="row rounded" id="cartItem${ci.id}" style="border: 1px solid" name="cartItemRow">
@@ -68,8 +69,8 @@ function insertCartItemRow(cartItem) {
             <span>X</span>
             <span id="itemPrice">${ci.item.price}</span>
             <p>Стоимость со скидкой: </p>
-            <p>${ci.item.price - 0}</p>   <!-- удалить при добавлении функции подсчета скидки -->
-            <!-- <p>${"ci.item.price - ci.desc.fixedDiscount"}</p> --> <!-- раскоментировать при добавлении функции подсчета скидки, убрать ковычки -->
+            <!--<p>${ci.item.price - 0}</p>-->   <!-- удалить при добавлении функции подсчета скидки -->
+            <p>${finalPrice}</p>  <!-- раскоментировать при добавлении функции подсчета скидки, убрать ковычки -->
           </div>
           <div>
             <span>= </span>
@@ -79,7 +80,8 @@ function insertCartItemRow(cartItem) {
     </div>
     <div class="row m-1">&nbsp;</div>
     `)
-    sumForCartItem(ci.id, ci.item.price);
+
+    sumForCartItem(ci.id, finalPrice);
     subtotalForCartItems();
 }
 
