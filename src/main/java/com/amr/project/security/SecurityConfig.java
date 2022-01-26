@@ -1,5 +1,6 @@
 package com.amr.project.security;
 
+import com.amr.project.jwt.jwt_realization.JwtFilter;
 import com.amr.project.security.handler.OAuth2LoginSuccessHandler;
 import com.amr.project.security.handler.SuccessUserHandler;
 import com.amr.project.service.impl.CustomOAuth2UserService;
@@ -16,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -33,6 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     private final CustomWebAuthenticationDetailsSource authenticationDetailsSource;
     private final CustomAuthenticationProvider customAuthenticationProvider;
+    private final JwtFilter jwtFilter;
 
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
@@ -52,7 +55,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // контроллеры для получения и обновления токена
             .antMatchers("/api/auth/login", "/api/auth/token").permitAll()
                 // контроллеры для отображения товаров незарегистрированным пользователям
-            .antMatchers("/api/category", "/api/item/popular/", "/api/shop/popular/").permitAll()
+            .antMatchers("/api/category/**",
+                    "/category/**",
+                    "/api/item/popular/",
+                    "/api/shop/popular/").permitAll()
             .antMatchers("/oauth2/**").permitAll()
             .antMatchers("/").permitAll()
             .antMatchers("/messenger").hasAuthority("USER")
@@ -62,7 +68,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/messages").hasAnyAuthority("USER","MODERATOR","ADMIN")
             .antMatchers("/feedback").hasAnyAuthority("USER","MODERATOR","ADMIN")
             .antMatchers("/feedback/feedbacklist").hasAnyAuthority("MODERATOR", "ADMIN")
-            .antMatchers("/order").hasAnyAuthority("USER", "ADMIN");
+            .antMatchers("/order").hasAnyAuthority("USER", "ADMIN")
+            .anyRequest().authenticated()
+            .and()
+            .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
             http.formLogin().successHandler(successUserHandler)
             .loginPage("/login").loginProcessingUrl("/login")
@@ -74,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .loginPage("/login")
             .userInfoEndpoint().userService(oAuth2UserService)
             .and()
-            .successHandler(oAuth2LoginSuccessHandler)
+//            .successHandler(oAuth2LoginSuccessHandler)
             .and().cors();
 
         http.formLogin()

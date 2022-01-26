@@ -55,6 +55,10 @@ public class JwtProvider {
         return refreshToken;
     }
 
+    public boolean validateAccessToken(@NonNull String token) {
+        return validateToken(token, jwtAccessSecret);
+    }
+
     public boolean validateRefreshToken(@NonNull String token) {
         return validateToken(token, jwtRefreshSecret);
     }
@@ -75,6 +79,10 @@ public class JwtProvider {
             log.error("invalid token", e);
         }
         return false;
+    }
+
+    public Claims getAccessClaims(@NonNull String token) {
+        return getClaims(token, jwtAccessSecret);
     }
 
     public Claims getRefreshClaims(@NonNull String token) {
