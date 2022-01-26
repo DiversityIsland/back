@@ -4,13 +4,11 @@ import com.amr.project.model.dto.ShopDto;
 import com.amr.project.model.entity.Shop;
 import com.amr.project.model.entity.User;
 import com.github.scribejava.core.base64.Base64;
-import org.jetbrains.annotations.NotNull;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -42,8 +40,10 @@ public interface ShopMapper {
             @Mapping(source = "location", target = "location.name"),
             @Mapping(source = "logo", target = "logo.url"),
             @Mapping(source = "logoarray", target = "logo.picture"),
-            @Mapping(source = "moderated", target = "isModerated"),
-            @Mapping(source = "moderateAccept", target = "isModerateAccept"),
+            @Mapping(source = "moderated", target = "moderated"),
+//            @Mapping(source = "moderated", target = "isModerated"),
+            @Mapping(source = "moderateAccept", target = "moderateAccept"),
+//            @Mapping(source = "moderateAccept", target = "isModerateAccept"),
             @Mapping(source = "moderatedRejectReason", target = "moderatedRejectReason")
     })
     Shop shopDtoToShop(ShopDto shopDto);

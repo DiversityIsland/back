@@ -1,5 +1,6 @@
 package com.amr.project.security;
 
+import com.amr.project.jwt.jwt_realization.JwtFilter;
 import com.amr.project.security.handler.OAuth2LoginSuccessHandler;
 import com.amr.project.security.handler.SuccessUserHandler;
 import com.amr.project.service.impl.CustomOAuth2UserService;
@@ -9,23 +10,24 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final SuccessUserHandler successUserHandler;
@@ -33,6 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     private final CustomWebAuthenticationDetailsSource authenticationDetailsSource;
     private final CustomAuthenticationProvider customAuthenticationProvider;
+    private final JwtFilter jwtFilter;
 
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
@@ -42,29 +45,46 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     // antMatchers() с указанием страниц и ролей пока не пишу, чтобы пока не мешали
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/oauth2/**").permitAll()
-                .antMatchers("/").anonymous()
-                .antMatchers("/messenger").hasAuthority("USER")
-                .antMatchers("/admin").hasAuthority("ADMIN")
-                .antMatchers("/user").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/moderator").hasAnyAuthority("MODERATOR", "ADMIN")
-                .antMatchers("/messages").hasAnyAuthority("USER","MODERATOR","ADMIN")
-                .antMatchers("/feedback").hasAnyAuthority("USER","MODERATOR","ADMIN")
-                .antMatchers("/feedback/feedbacklist").hasAnyAuthority("MODERATOR", "ADMIN")
-                .antMatchers("/order").hasAnyAuthority("USER", "ADMIN")
-                .and().formLogin().successHandler(successUserHandler)
-                .loginPage("/login").loginProcessingUrl("/login")
-                // Указываем параметры логина и пароля с формы логина
-                .usernameParameter("j_username")
-                .passwordParameter("j_password")
-                .and().rememberMe()
-                .and().oauth2Login()
-                .loginPage("/login")
-                .userInfoEndpoint().userService(oAuth2UserService)
-                .and()
-                .successHandler(oAuth2LoginSuccessHandler)
-                .and().cors();
+        http
+            .httpBasic().disable()
+            .csrf().disable()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .authorizeRequests()
+                // контроллеры для получения и обновления токена
+            .antMatchers("/api/auth/login", "/api/auth/token").permitAll()
+                // контроллеры для отображения товаров незарегистрированным пользователям
+            .antMatchers("/api/category/**",
+                    "/category/**",
+                    "/api/item/popular/",
+                    "/api/shop/popular/").permitAll()
+            .antMatchers("/oauth2/**").permitAll()
+            .antMatchers("/").permitAll()
+            .antMatchers("/messenger").hasAuthority("USER")
+            .antMatchers("/admin").hasAuthority("ADMIN")
+            .antMatchers("/user").hasAnyAuthority("USER", "ADMIN")
+            .antMatchers("/moderator").hasAnyAuthority("MODERATOR", "ADMIN")
+            .antMatchers("/messages").hasAnyAuthority("USER","MODERATOR","ADMIN")
+            .antMatchers("/feedback").hasAnyAuthority("USER","MODERATOR","ADMIN")
+            .antMatchers("/feedback/feedbacklist").hasAnyAuthority("MODERATOR", "ADMIN")
+            .antMatchers("/order").hasAnyAuthority("USER", "ADMIN")
+            .anyRequest().authenticated()
+            .and()
+            .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
+            http.formLogin().successHandler(successUserHandler)
+            .loginPage("/login").loginProcessingUrl("/login")
+            // Указываем параметры логина и пароля с формы логина
+            .usernameParameter("j_username")
+            .passwordParameter("j_password")
+            .and().rememberMe()
+            .and().oauth2Login()
+            .loginPage("/login")
+            .userInfoEndpoint().userService(oAuth2UserService)
+            .and()
+//            .successHandler(oAuth2LoginSuccessHandler)
+            .and().cors();
 
         http.formLogin()
                 .successHandler(successUserHandler)
