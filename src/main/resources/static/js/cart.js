@@ -9,9 +9,8 @@ async function getItems() {
         //checkPaymentButton()
 
         for (let i = 0; i < cartItems.length; i++) {
-            // раскомментировать при добавлении функции подсчета скидки
-            // let desc = await fetch("/api/discounts/" + cartItems[i].shop.id);
-            // cartItems[i].desc = await desc.json();
+             let desc = await fetch("/api/discounts/" + cartItems[i].shop.id);
+             cartItems[i].desc = await desc.json();
         }
         console.log(cartItems);
     }
@@ -20,7 +19,7 @@ async function getItems() {
     }
 }
 
-getItems()
+getItems();
 
 function checkPaymentButton() {
     let rowsDiv = document.getElementsByName("cartItemRow");
@@ -40,7 +39,8 @@ function insertCartItemRow(cartItem) {
         item: cartItem.item,
         shop: cartItem.shop,
         user: cartItem.user,
-        desc: cartItem.desc
+        desc: cartItem.desc,
+        resultprice: cartItem.quantity * (cartItem.item.price -  cartItem.desc.fixedDiscount)
     };
     i++;
     document.querySelector('#cartItems').insertAdjacentHTML('beforeend', `
@@ -61,15 +61,16 @@ function insertCartItemRow(cartItem) {
               <label for="cartItemQuantity">Количество:</label>
               <input type="number" id="cartItemQuantity${ci.id}" value="${ci.quantity}" class="form-control" min="1">
               <button type="submit" class="btn btn-secondary btn-sm mt-2" id="changeQuantity" onclick=
-              "sumForCartItem(${ci.id}, ${ci.item.price}); updateQuantity(${ci.id}); subtotalForCartItems();">Пересчитать сумму</button>
+              "sumForCartItem(${ci.id}, ${ci.resultprice}); updateQuantity(${ci.id}); subtotalForCartItems();">Пересчитать сумму</button>
             </div>
           </div>
           <div name = "itemPrice">
             <span>X</span>
             <span id="itemPrice">${ci.item.price}</span>
+            </div>
+          <div name = "itemResultPrice">
             <p>Стоимость со скидкой: </p>
-            <p>${ci.item.price - 0}</p>   <!-- удалить при добавлении функции подсчета скидки -->
-            <!-- <p>${"ci.item.price - ci.desc.fixedDiscount"}</p> --> <!-- раскоментировать при добавлении функции подсчета скидки, убрать ковычки -->
+            <span id="itemResultPrice">${ci.resultprice}</span>
           </div>
           <div>
             <span>= </span>
@@ -79,7 +80,8 @@ function insertCartItemRow(cartItem) {
     </div>
     <div class="row m-1">&nbsp;</div>
     `)
-    sumForCartItem(ci.id, ci.item.price);
+
+    sumForCartItem(ci.id, ci.resultprice);
     subtotalForCartItems();
 }
 
