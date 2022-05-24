@@ -8,9 +8,7 @@ import com.amr.project.converter.ShopMapper;
 import com.amr.project.model.dto.ImageDto;
 import com.amr.project.model.dto.ItemDto;
 import com.amr.project.model.dto.ShopDto;
-import com.amr.project.model.entity.Country;
-import com.amr.project.model.entity.Image;
-import com.amr.project.model.entity.Shop;
+import com.amr.project.model.entity.*;
 import com.amr.project.service.abstracts.*;
 import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @RestController
@@ -96,8 +96,35 @@ public class ShopRestController {
 
     @PostMapping("/add")
     public ResponseEntity<Shop> addItem(@RequestBody ShopDto shopDto, Authentication authentication) {
-        Shop shop = shopService.addShop(shopDto, userService.findByUsername(authentication.getName()).get());
+        Shop shop = shopMapper.shopDtoToShop(shopDto);
+//        User user = userService.findByUsername(authentication.getName()).get();
+//        Image image;
+//        if (shop.getLogo().getUrl() == null || shop.getLogo().getPicture() == null) {
+//            image = null;
+//        } else {
+//            image = Image.builder()
+//                    .url(shop.getLogo().getUrl())
+//                    .picture(shop.getLogo().getPicture())
+//                    .isMain(true)
+//                    .build();
+//        }
+//
+//        if (countryService.getByName(shopDto.getLocation()) == null) {
+//            countryService.persist(new Country(shopDto.getLocation()));
+//        }
+//        shop.setLocation(countryService.getByName(shopDto.getLocation()));
+//
+//        if (userService.findByUsername(user.getUsername()).isEmpty()) {
+//            userService.persist(user);
+//        }
+//        shop.setUser(user);
+//        shop.setLogo(image);
+
+        shopService.persist(shop);
         return new ResponseEntity<>(shop, HttpStatus.CREATED);
+
+//        Shop shop = shopService.addShop(shopDto, userService.findByUsername(authentication.getName()).get());
+//        return new ResponseEntity<>(shop, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

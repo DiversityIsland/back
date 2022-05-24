@@ -17,7 +17,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         @Sql("data.sql"),
         @Sql(scripts = "dropTable.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 })
-public class MyProfileRestControllerTest extends AbstractIntegrationTest{
+public class
+MyProfileRestControllerTest extends AbstractIntegrationTest{
 
 
         @Autowired
